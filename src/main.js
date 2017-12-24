@@ -1,4 +1,5 @@
-import App from './components/App'
+import App from './pages/App'
+import './common/lib/gif'
 // import router from './router'
 
 new Vue({

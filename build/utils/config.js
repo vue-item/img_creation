@@ -10,18 +10,10 @@ const conf = {
     chunks: ['vendor', 'app']
   },
   output: {
-    local: {
-        publicPath: `//${ip}:3000/dist/`
-    },
-    test: {
-        publicPath: `//${ip}:3000/dist/`
-    },
-    beta: {
-        publicPath: `//${ip}:3000/dist/`
-    },
-    prod: {
-        publicPath: `//${ip}:3000/dist/`
-    }
+    local: `//${ip}:3000/dist/`,
+    test: `//${ip}:3000/dist/`,
+    beta: `//${ip}:3000/dist/`,
+    prod: `//${ip}:3000/dist/`,
   }
 }
 

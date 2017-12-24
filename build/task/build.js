@@ -1,15 +1,15 @@
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse('"production"')
 }
+const log = console.log
 const fs = require('fs-extra')
 const chalk = require('chalk')
-const env = require('./config/env')
+const env = require('../utils/config')
 const inquirer = require('inquirer')
 const webpackTask = require('./build-common')
-const webpackConfig = require('./webpack.prod')
+const webpackConfig = require('../webpack.prod')
 const compile = (buildEnv) => {
-  webpackConfig.output.publicPath = env[buildEnv].publicPath
-
+  webpackConfig.output.publicPath = env.output[buildEnv]
   return Promise.resolve()
     .then(() => webpackTask(webpackConfig, buildEnv))
     .catch((err) => {

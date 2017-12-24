@@ -11,6 +11,7 @@ const conf = {
     vendor: [
       'vue',
       'vue-router',
+      // 'fabric',
       './src/common/common.css'
     ]
   },
@@ -27,6 +28,8 @@ const conf = {
       resolve('node_modules')
     ],
     alias: {
+      // 'fabric': 'fabric/dist/fabric.js',
+      // 'log': resolve('./build/utils/log.js'),
       'vue': 'vue/dist/vue.runtime.min.js',
       'vue-router': 'vue-router/dist/vue-router.min.js',
       '@': resolve('src/components')
@@ -42,7 +45,9 @@ const conf = {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
-        include: [resolve('src')],
+        include: [
+          resolve('src')
+        ],
         exclude: /node_modules/,
         options: {
           formatter: require('eslint-friendly-formatter')
@@ -63,7 +68,10 @@ const conf = {
         // loader: ['babel-loader?cacheDirectory=true'],
         loader: 'babel-loader',
         exclude: /node_modules/,
-        include: [resolve('src')]
+        include: [
+          resolve('src'),
+          resolve('node_modules/jsdom/lib/jsdom/living/generated/utils.js') // es6
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg|swf|woff2?|eot|ttf|otf)(\?.*)?$/,

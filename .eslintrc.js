@@ -16,7 +16,8 @@ module.exports = {
         'html'
     ],
     globals: {
-        'Vue': true
+        'Vue': true,
+        'log': true
     },
     // add your custom rules here
     'rules': {
@@ -25,6 +26,7 @@ module.exports = {
         'no-new': 0, // new Object
         // allow paren-less arrow functions
         'arrow-parens': 0,
+        'new-cap': 0, // 构造函数大写
         // allow async-await
         'generator-star-spacing': 0,
         // allow debugger during development
