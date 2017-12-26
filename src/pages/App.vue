@@ -24,6 +24,7 @@
 </template>
 
 <script>
+
 import { fabric } from 'fabric'
 import loading from '../common/loading'
 import { saveAs } from 'file-saver'
