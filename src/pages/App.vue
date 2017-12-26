@@ -1,25 +1,21 @@
 <template>
-  <div class="container">{{ n }}
+  <div class="container">
     <div class="wrap">
       <div class="wrap_pd">
         <input type="text" placeholder="请粘入url" name="text" class="input" />
-        <button class="update_btn" @click="indirectTarget">
+        <div class="update_btn">
           本地上传 gif 动画
-          <input type="file" accept="image/gif" @change="selectorFile" name="file">
-        </button>
+          <input type="file" name="file" v-on:change="postImg" accept="image/gif" />
+        </div>
       </div>
     </div>
     <div class="canvas_wrap">
-      <canvas id="canvas" :width='params.width || 0' :height='params.height || 0'></canvas>
+      <canvas id="canvas" :width='params.width' :height='params.height'></canvas>
     </div>
     <div id="view"></div>
     <div class="start">
-      <span @click="test">target</span>
-    </div>
-    <div class="start">
       <input id="save" class="save_btn" type="button" value="保存图片" @click="saveImg">
     </div>
-    <div v-for="v in list">{{ v }}</div>
   </div>
 </template>
 
@@ -35,9 +31,10 @@ import { fileReader, loadGif, createElement, preloadingImg } from '../common/uti
 export default {
   data () {
     return {
-      list: [1, 2, 3, 4],
-      params: {},
-      n: 0 // 保存张数
+      params: {
+        width: 800,
+        height: 400
+      }
     }
   },
   created () {
@@ -47,25 +44,30 @@ export default {
     setTimeout(() => {
       loading.hide()
     }, 500)
-    this.n = 1
   },
   methods: {
-    selectorFile (e) {
+    postImg (e) {
+      let obj = ''
+      // const self = this
       const tar = e.target.files[0]
       const fr = fileReader(tar, {
         readAsDataURL: true,
         onload (event) {
           preloadingImg(fr.result)
+          .then((res) => {
+            obj = res
+            // self.params.height = res.height
+          })
           .then((params) => {
             createElement('img', {
               src: fr.result,
               callback (el) {
                 const canvas = new fabric.Canvas('canvas')
                 const img = new fabric.Image(el, {
-                  left: 0,
-                  top: 0,
-                  width: params.width,
-                  height: params.height
+                  left: 100,
+                  top: 100,
+                  width: obj.width,
+                  height: obj.height
                 })
                 canvas.add(img)
               }
@@ -143,23 +145,14 @@ export default {
       this.n += 1
       const cs = document.querySelector('#canvas')
       cs.toBlob((blob) => {
-        saveAs(blob, '51gif-' + this.n + '.gif')
+        saveAs(blob, '51gif.gif')
       })
-    },
-
-    test () {
-      this.params.width = 100
-      this.params.height = 100
-      this.list.push(4, 5, 6, 7)
     }
   }
 }
 </script>
 
 <style>
-  canvas {
-    background: #ddd;
-  }
   .container {
     width: 800px;
     margin: 0 auto;
@@ -206,6 +199,9 @@ export default {
     cursor: pointer;
     background-image: linear-gradient(-135deg, #86CD6D 0%, #60C4AF 100%);
     color: #fff;
+  }
+  .container .canvas_wrap {
+    background: #ddd;
   }
   .container .save_btn {
     display: inline-block;
