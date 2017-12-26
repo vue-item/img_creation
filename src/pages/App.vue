@@ -1,18 +1,42 @@
 <template>
-  <div class="container">
-    <input type="file" @change="changeFile" name="file">
+  <div class="container">{{ n }}
+    <div class="wrap">
+      <div class="wrap_pd">
+        <input type="text" placeholder="请粘入url" name="text" class="input" />
+        <button class="update_btn" @click="indirectTarget">
+          本地上传 gif 动画
+          <input type="file" accept="image/gif" @change="selectorFile" name="file">
+        </button>
+      </div>
+    </div>
+    <div class="canvas_wrap">
+      <canvas id="canvas" :width='params.width || 0' :height='params.height || 0'></canvas>
+    </div>
     <div id="view"></div>
+    <div class="start">
+      <span @click="test">target</span>
+    </div>
+    <div class="start">
+      <input id="save" class="save_btn" type="button" value="保存图片" @click="saveImg">
+    </div>
+    <div v-for="v in list">{{ v }}</div>
   </div>
 </template>
 
 <script>
 import { fabric } from 'fabric'
 import loading from '../common/loading'
+import { saveAs } from 'file-saver'
+import { fileReader, loadGif, createElement, preloadingImg } from '../common/util'
+// 上传图片后canvas居中，大小设定问题
+// 输出定制大小问题
 
 export default {
   data () {
     return {
-      len: 0
+      list: [1, 2, 3, 4],
+      params: {},
+      n: 0 // 保存张数
     }
   },
   created () {
@@ -21,63 +45,80 @@ export default {
   mounted () {
     setTimeout(() => {
       loading.hide()
-    }, 1000)
+    }, 500)
+    this.n = 1
   },
   methods: {
-    changeFile (e) {
+    selectorFile (e) {
       const tar = e.target.files[0]
-      if (/gif$/.test(tar.type)) {
-        const file = new FileReader()
-
-        file.onprogress = (e) => {
-          const progress = '进度' + (100 * e.loaded / e.total | 0) + '%'
-          log(progress)
+      const fr = fileReader(tar, {
+        readAsDataURL: true,
+        onload (event) {
+          preloadingImg(fr.result)
+          .then((params) => {
+            createElement('img', {
+              src: fr.result,
+              callback (el) {
+                const canvas = new fabric.Canvas('canvas')
+                const img = new fabric.Image(el, {
+                  left: 0,
+                  top: 0,
+                  width: params.width,
+                  height: params.height
+                })
+                canvas.add(img)
+              }
+            })
+          })
         }
-
-        file.onload = (e) => {
-          log('加载完成')
-          const gif = new Gif()
-          gif.onprogress = (e) => {
-            log('解析' + (100 * e.loaded / e.total | 0) + '%')
-          }
-          gif.onparse = () => {
-            log('解析完成')
-            setTimeout(() => {
-              this.buildView(gif, file.name, true)
-            }, 100)
-          }
-          gif.onerror = (e) => {
-            log(e)
-          }
-          gif.parse(file.result)
-        }
-
-        file.onerror = (e) => {
-          log(e)
-        }
-
-        file.readAsArrayBuffer(tar)
-        // fr.readAsDataURL(file)
-      } else {
-        log('not gif')
-      }
+      })
     },
-    buildView (gif, fname, preRender) {
+
+    splitGif (e) {
+      const self = this
+      const tar = e.target.files[0]
+      if (/gif$/.test(tar.type)) { // 限制10mb大小
+        const file = fileReader(tar, {
+          readAsArrayBuffer: true,
+          onprogress: (e) => {
+            log('进度' + (100 * e.loaded / e.total | 0) + '%')
+          },
+          onload () {
+            const img = loadGif(file.result, {
+              onprogress (e) {
+                log('解析' + (100 * e.loaded / e.total | 0) + '%')
+              },
+              onparse () {
+                log('解析完成')
+                setTimeout(() => {
+                  self.buildView(img, file.name, true)
+                }, 100)
+              }
+            })
+          }
+        })
+      } else { alert('not gif') }
+    },
+
+    buildView (img, fname, preRender) {
       const merge = new fabric.Canvas('merge')
 
-      const canvas = document.createElement('canvas')
-      canvas.width = gif.header.width
-      canvas.height = gif.header.height
-      canvas.title = 'w=' + canvas.width + ' h=' + canvas.height
+      const canvas = createElement('canvas', {
+        width: img.header.width,
+        height: img.header.height,
+        title: 'w=' + img.header.width + ' h=' + img.header.height
+      })
 
-      const frames = gif.createFrameImages(canvas.getContext('2d'), preRender, !preRender)
+      const frames = img.createFrameImages(canvas.getContext('2d'), preRender, !preRender)
 
       for (let i = 0, len = frames.length; i < len; i++) {
-        const cs = document.createElement('canvas')
-        cs.width = frames[i].image.width
-        cs.height = frames[i].image.height
+        const cs = createElement('canvas', {
+          width: frames[i].image.width,
+          height: frames[i].image.height,
+          title: 'w=' + frames[i].image.width + ' h=' + frames[i].image.height + ' delay=' + frames[i].delay + ' disposal=' + frames[i].disposalMethod
+        })
+
         cs.getContext('2d').putImageData(frames[i].image, 0, 0)
-        cs.title = 'w=' + frames[i].image.width + ' h=' + frames[i].image.height + ' delay=' + frames[i].delay + ' disposal=' + frames[i].disposalMethod
 
         if (frames.length > 1) {
           new fabric.Image.fromURL(cs.toDataURL(), (img) => {
@@ -95,20 +136,89 @@ export default {
           log('无效的gif')
         }
       }
+    },
+
+    saveImg () {
+      this.n += 1
+      const cs = document.querySelector('#canvas')
+      cs.toBlob((blob) => {
+        saveAs(blob, '51gif-' + this.n + '.gif')
+      })
+    },
+
+    test () {
+      this.params.width = 100
+      this.params.height = 100
+      this.list.push(4, 5, 6, 7)
     }
   }
 }
 </script>
 
 <style>
+  canvas {
+    background: #ddd;
+  }
   .container {
+    width: 800px;
+    margin: 0 auto;
+    font-size: 14px;
+  }
+  .wrap {
+    width: 100%;
+    padding: 30px 60px;
+    background-image: linear-gradient(-135deg, #1774BD 0%, #5841C2 100%);
+    box-sizing: border-box;
+  }
+  .wrap_pd {
+    position: relative;
+  }
+  .wrap_pd .input {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 6px;
+    padding-right: 123px;
+    border-radius: 3px;
+    border: 0 none;
+    background-color: #fff;
+    box-sizing: border-box;
+  }
+  .wrap_pd input[type="file"] {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
+    opacity: 0;
   }
-  canvas {
-    border: 1px dashed black;
+  .wrap_pd .update_btn {
+    position: absolute;
+    right: 1px;
+    top: 50%;
+    height: 38px;
+    line-height: 38px;
+    margin-top: -19px;
+    padding: 0 12px;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    background-image: linear-gradient(-135deg, #86CD6D 0%, #60C4AF 100%);
+    color: #fff;
+  }
+  .container .save_btn {
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    border: 0 none;
+    border-radius: 3px;
+    background-image: linear-gradient(-135deg, #E86874 0%, #E58A4D 100%);
+    color: #fff;
+  }
+  .container .start {
+    padding: 20px;
+    text-align: center;
   }
 </style>

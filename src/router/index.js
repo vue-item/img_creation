@@ -9,8 +9,33 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '',
-      name: 'home',
+      path: 'compression',
+      name: 'compression',
+      component: Home
+    },
+    {
+      path: 'cut',
+      name: 'cut',
+      component: Home
+    },
+    {
+      path: 'editor',
+      name: 'editor',
+      component: Home
+    },
+    {
+      path: 'video',
+      name: 'video',
+      component: Home
+    },
+    {
+      path: 'gifTool',
+      name: 'gifTool',
+      component: Home
+    },
+    {
+      path: 'demo',
+      name: 'demo',
       component: Home
     }
   ]

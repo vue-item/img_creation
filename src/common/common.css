@@ -31,30 +31,26 @@ body::-webkit-scrollbar {
   width: 0;
 }
 
+input, textarea, button {
+  outline: none;
+}
+
 button {
   padding: 0;
   border: none;
   background: transparent;
 }
 
-.container {
-  display: flex;
-}
-
 .f12 {
   font-size: 12px;
 }
+
 .f14 {
   font-size: 14px;
 }
-.f20 {
-  font-size: 20px;
-}
-.f24 {
-  font-size: 24px;
-}
-.f36 {
-  font-size: 36px;
+
+.f16 {
+  font-size: 16px;
 }
 
 .flex {
