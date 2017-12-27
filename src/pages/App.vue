@@ -2,11 +2,11 @@
   <div class="container">
     <div class="wrap">
       <div class="wrap_pd">
-        <input type="text" placeholder="请粘入url" name="text" class="input" />
-        <div class="update_btn">
-          本地上传 gif 动画
-          <input type="file" name="file" v-on:change="postImg" accept="image/gif" />
-        </div>
+        <input ref="remote" type="text" placeholder="请粘入url" name="text" class="input" />
+        <div class="update_btn blue" @click="loadImg">加载图片</div>
+      </div>
+      <div class="hidden">
+        <input id="file" type="file" name="file" v-on:change="addImg" accept="image/gif" />
       </div>
     </div>
     <div class="canvas_wrap">
@@ -14,17 +14,34 @@
     </div>
     <div id="view"></div>
     <div class="start">
-      <input id="save" class="save_btn" type="button" value="保存图片" @click="saveImg">
+      <input class="btn blue f14" type="button" value="添加段落" @click="addTextBox">
+      <input class="btn green f14" type="button" value="添加文本" @click="addIText">
+      <input class="btn yellow f14" type="button" value="添加文字" @click="addText">
+      <input class="btn red f14" type="button" value="插入图片" @click="targetFile">
+      <input class="btn red f14" type="button" value="删除选中" @click="clearObject">
+      <input class="btn red f14" type="button" value="清除画布" @click="clearAllObj">
+      <input class="btn orange f14" type="button" value="保存图片" @click="saveImg">
+    </div>
+    <div class="start">
+      <input class="btn blue f14" type="button" value="向上" @click="up">
+      <input class="btn blue f14" type="button" value="组向上" @click="upGroup">
+      <input class="btn blue f14" type="button" value="向下" @click="down">
+      <input class="btn blue f14" type="button" value="组向下" @click="downGroup">
+      <input id="cs_width" minlength="1" class="min_input" type="number">
+      <input id="cs_height" maxlength="800" class="min_input" type="number">
+      <input class="btn orange f14" type="button" value="调整画布" @click="modifyCanvas">
     </div>
   </div>
 </template>
 
 <script>
-
 import { fabric } from 'fabric'
 import loading from '../common/loading'
 import { saveAs } from 'file-saver'
+import { Canvas, Text, TextBox, IText } from '../common/fabric'
 import { fileReader, loadGif, createElement, preloadingImg } from '../common/util'
+
+// 添加路径别名
 // 上传图片后canvas居中，大小设定问题
 // 输出定制大小问题
 
@@ -32,9 +49,10 @@ export default {
   data () {
     return {
       params: {
-        width: 800,
+        width: 400,
         height: 400
-      }
+      },
+      canvas: Object
     }
   },
   created () {
@@ -44,11 +62,88 @@ export default {
     setTimeout(() => {
       loading.hide()
     }, 500)
+    this.canvas = Canvas('canvas')
+    this.canvas.backgroundColor = 'rgba(0,0,255,0.3)'
+    this.canvas.renderAll()
   },
   methods: {
-    postImg (e) {
+    loadImg () {
+      const url = this.$refs.remote.value
+      alert(url)
+    },
+
+    up () {
+      this.canvas.getActiveObject().bringForward()
+      this.canvas.requestRenderAll()
+    },
+
+    upGroup () {
+      this.canvas.getActiveObject().bringToFront()
+      this.canvas.requestRenderAll()
+    },
+
+    down () {
+      this.canvas.getActiveObject().sendBackwards()
+      this.canvas.requestRenderAll()
+    },
+
+    downGroup () {
+      this.canvas.getActiveObject().sendToBack()
+      this.canvas.requestRenderAll()
+    },
+
+    filter () {
+
+    },
+
+    modifyCanvas () {
+      const width = document.querySelector('#cs_width').value
+      const height = document.querySelector('#cs_height').value
+      if (width && height) {
+        this.canvas.setHeight(height)
+        this.canvas.setWidth(width)
+      }
+    },
+
+    clearObject () {
+      this.canvas.remove.apply(this.canvas, this.canvas.getActiveObjects()) // 删除的元素还原回来
+      this.canvas.discardActiveObject()
+    },
+
+    clearAllObj () {
+      this.canvas.remove.apply(this.canvas, this.canvas.getObjects())
+      this.canvas.discardActiveObject()
+    },
+
+    targetFile () {
+      const file = document.querySelector('#file')
+      file.click()
+    },
+
+    addIText () {
+      const itext = IText('哈哈')
+      this.canvas.add(itext)
+    },
+
+    addTextBox () {
+      const text = TextBox('呵呵呵', {
+        width: 300,
+        backgroundColor: '#FFFFA5'
+      })
+      this.canvas.add(text)
+      // text.selectAll()
+      // text.enterEditing()
+      // text.hiddenTextarea.focus() // 无法失去焦点
+    },
+
+    addText () {
+      const t = Text('😡😝😊😤🦑apple苹果 \ 😝😑哈哈哈')
+      this.canvas.add(t)
+    },
+
+    addImg (e) {
       let obj = ''
-      // const self = this
+      const self = this
       const tar = e.target.files[0]
       const fr = fileReader(tar, {
         readAsDataURL: true,
@@ -62,14 +157,13 @@ export default {
             createElement('img', {
               src: fr.result,
               callback (el) {
-                const canvas = new fabric.Canvas('canvas')
                 const img = new fabric.Image(el, {
                   left: 100,
                   top: 100,
                   width: obj.width,
                   height: obj.height
                 })
-                canvas.add(img)
+                self.canvas.add(img)
               }
             })
           })
@@ -142,10 +236,10 @@ export default {
     },
 
     saveImg () {
-      this.n += 1
-      const cs = document.querySelector('#canvas')
-      cs.toBlob((blob) => {
-        saveAs(blob, '51gif.gif')
+      const canvas = document.querySelector('#canvas')
+      this.canvas.discardActiveObject()
+      canvas.toBlob((blob) => {
+        saveAs(blob, '51gif.png')
       })
     }
   }
@@ -154,9 +248,14 @@ export default {
 
 <style>
   .container {
-    width: 800px;
     margin: 0 auto;
     font-size: 14px;
+  }
+  .container .hidden {
+    position: fixed;
+    top: -10px;
+    left: 0;
+    visibility: hidden;
   }
   .wrap {
     width: 100%;
@@ -197,25 +296,35 @@ export default {
     text-align: center;
     border-radius: 3px;
     cursor: pointer;
-    background-image: linear-gradient(-135deg, #86CD6D 0%, #60C4AF 100%);
     color: #fff;
   }
   .container .canvas_wrap {
     background: #ddd;
   }
-  .container .save_btn {
+  .container .btn {
     display: inline-block;
-    width: 100px;
     height: 40px;
-    text-align: center;
+    margin: 0 6px;
+    padding: 0 12px;
     line-height: 40px;
+    text-align: center;
     border: 0 none;
     border-radius: 3px;
-    background-image: linear-gradient(-135deg, #E86874 0%, #E58A4D 100%);
+    cursor: pointer;
     color: #fff;
   }
   .container .start {
-    padding: 20px;
+    padding: 20px 10px;
     text-align: center;
+  }
+  .min_input {
+    width: 60px;
+    height: 38px;
+    padding: 0 6px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+  }
+  canvas {
+    border: solid black 1px;
   }
 </style>

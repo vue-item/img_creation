@@ -35,6 +35,13 @@ input, textarea, button {
   outline: none;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+  -webkit-appearance: none !important;
+  margin: 0;
+}
+input[type="number"]{-moz-appearance:textfield;}
+
 button {
   padding: 0;
   border: none;
@@ -59,3 +66,22 @@ button {
   justify-content: center;
 }
 
+.blue {
+  background-image: linear-gradient(-136deg, #A3D7DD 0%, #B0A2DB 100%);
+}
+
+.orange {
+  background-image: linear-gradient(-135deg, #E86874 0%, #E58A4D 100%);
+}
+
+.green {
+  background-image: linear-gradient(-135deg, #86CD6D 0%, #60C4AF 100%);
+}
+
+.yellow {
+  background-image:linear-gradient(-140deg, #FBD533 0%, #A2D85E 100%);
+}
+
+.red {
+  background-image: linear-gradient(-135deg, #f6a46f 0%, #c27cd0 100%);
+}

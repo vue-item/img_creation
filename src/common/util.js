@@ -109,3 +109,7 @@ export const preloadingImg = (src) => {
     img.src = src
   })
 }
+
+export const verifyAddress = (e) => {
+  log(1) // 验证 url
+}
