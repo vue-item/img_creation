@@ -23,6 +23,7 @@
       <input class="btn orange f14" type="button" value="保存图片" @click="saveImg">
     </div>
     <div class="start">
+      <input class="btn blue f14" type="button" value="失去焦点" @click="targerBlur">
       <input class="btn blue f14" type="button" value="向上" @click="up">
       <input class="btn blue f14" type="button" value="组向上" @click="upGroup">
       <input class="btn blue f14" type="button" value="向下" @click="down">
@@ -67,6 +68,16 @@ export default {
     this.canvas.renderAll()
   },
   methods: {
+    targerBlur () {
+      const text = Text('')
+      this.canvas.add(text)
+      this.canvas.setActiveObject(text)
+      this.clearObject()
+      // this.canvas.discardActiveObject()
+      // this.canvas.deactivateAllWithDispatch()
+      // this.canvas.discardActiveGroup()
+    },
+
     loadImg () {
       const url = this.$refs.remote.value
       alert(url)
@@ -123,6 +134,7 @@ export default {
     addIText () {
       const itext = IText('哈哈')
       this.canvas.add(itext)
+      // this.canvas.setActiveObject(itext)
     },
 
     addTextBox () {
@@ -131,14 +143,16 @@ export default {
         backgroundColor: '#FFFFA5'
       })
       this.canvas.add(text)
+      // this.canvas.setActiveObject(text)
       // text.selectAll()
       // text.enterEditing()
       // text.hiddenTextarea.focus() // 无法失去焦点
     },
 
     addText () {
-      const t = Text('😡😝😊😤🦑apple苹果 \ 😝😑哈哈哈')
-      this.canvas.add(t)
+      const text = Text('😡😝😊😤🦑apple苹果 \ 😝😑哈哈哈')
+      this.canvas.add(text)
+      // this.canvas.setActiveObject(text)
     },
 
     addImg (e) {
@@ -164,6 +178,7 @@ export default {
                   height: obj.height
                 })
                 self.canvas.add(img)
+                // this.canvas.setActiveObject(img)
               }
             })
           })
@@ -237,10 +252,13 @@ export default {
 
     saveImg () {
       const canvas = document.querySelector('#canvas')
-      this.canvas.discardActiveObject()
-      canvas.toBlob((blob) => {
-        saveAs(blob, '51gif.png')
-      })
+      // this.canvas.discardActiveObject()
+      this.targerBlur()
+      setTimeout(() => {
+        canvas.toBlob((blob) => {
+          saveAs(blob, '51gif.png')
+        })
+      }, 1000)
     }
   }
 }
