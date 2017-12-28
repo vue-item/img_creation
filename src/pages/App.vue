@@ -14,22 +14,46 @@
     </div>
     <div id="view"></div>
     <div class="start">
-      <input class="btn blue f14" type="button" value="添加段落" @click="addTextBox">
+      <input class="btn green f14" type="button" value="添加段落" @click="addTextBox">
       <input class="btn green f14" type="button" value="添加文本" @click="addIText">
-      <input class="btn yellow f14" type="button" value="添加文字" @click="addText">
+      <input class="btn green f14" type="button" value="添加文字" @click="addText">
       <input class="btn red f14" type="button" value="插入图片" @click="targetFile">
-      <input class="btn red f14" type="button" value="删除选中" @click="clearObject">
+      <input class="btn red f14" type="button" value="删除选中" @click="clearObj">
       <input class="btn red f14" type="button" value="清除画布" @click="clearAllObj">
+      <input class="btn blue f14" type="button" value="失去焦点" @click="targerBlur">
       <input class="btn orange f14" type="button" value="保存图片" @click="saveImg">
     </div>
     <div class="start">
-      <input class="btn blue f14" type="button" value="失去焦点" @click="targerBlur">
+      滤镜
+      <input class="btn yellow f14" type="button" value="模糊" @click="blur">
+      <input class="btn yellow f14" type="button" value="高亮" @click="brightness">
+      <input class="btn yellow f14" type="button" value="饱和" @click="saturation">
+      <input class="btn yellow f14" type="button" value="灰度" @click="grayscale">
+      <input class="btn yellow f14" type="button" value="像素" @click="pixelate">
+      <input class="btn yellow f14" type="button" value="反差" @click="contrast">
+      <input id="opacity" class="min_input" type="number" name="opacity">
+      <input class="btn yellow f14" type="button" value="透明度" @click="opacity">
+    </div>
+    <div class="start">
+      层叠
       <input class="btn blue f14" type="button" value="向上" @click="up">
       <input class="btn blue f14" type="button" value="组向上" @click="upGroup">
       <input class="btn blue f14" type="button" value="向下" @click="down">
       <input class="btn blue f14" type="button" value="组向下" @click="downGroup">
-      <input id="cs_width" minlength="1" class="min_input" type="number">
-      <input id="cs_height" maxlength="800" class="min_input" type="number">
+    </div>
+    <div class="start">
+      移动 和 翻转
+      <input class="btn blue f14" type="button" value="向左移动" @click="move('left', '-=10')">
+      <input class="btn blue f14" type="button" value="向右移动" @click="move('left', '+=10')">
+      <input class="btn blue f14" type="button" value="向上移动" @click="move('top', '-=10')">
+      <input class="btn blue f14" type="button" value="向下移动" @click="move('top', '+=10')">
+      <input class="btn blue f14" data-direction="false" type="button" value="左右翻转" @click="leftright">
+      <input class="btn blue f14" data-direction="false" type="button" value="上下翻转" @click="topbottom">
+      <!-- <input class="btn blue f14" data-direction="false" type="button" value="居中" @click="center"> -->
+    </div>
+    <div class="start">
+      <input id="cs_width" class="min_input" minlength="1" type="number">
+      <input id="cs_height" class="min_input" maxlength="800" type="number">
       <input class="btn orange f14" type="button" value="调整画布" @click="modifyCanvas">
     </div>
   </div>
@@ -45,6 +69,7 @@ import { fileReader, loadGif, createElement, preloadingImg } from '../common/uti
 // 添加路径别名
 // 上传图片后canvas居中，大小设定问题
 // 输出定制大小问题
+// 操作前确定选中的是一组元素 还是一个元素
 
 export default {
   data () {
@@ -63,16 +88,68 @@ export default {
     setTimeout(() => {
       loading.hide()
     }, 500)
-    this.canvas = Canvas('canvas')
+    this.canvas = Canvas('canvas', {
+      preserveObjectStacking: false
+    })
     this.canvas.backgroundColor = 'rgba(0,0,255,0.3)'
     this.canvas.renderAll()
+    this.canvas.on('object:selected', (e) => {
+      // log(e.target)
+    })
   },
   methods: {
+    // center () {
+    //   const obj = this.canvas.getActiveObject()
+    //   this.targerBlur()
+    //   setTimeout(() => {
+    //     const ow = Math.ceil(obj.width) / 2
+    //     const oh = Math.ceil(obj.height) / 2
+    //     const w = this.canvas.getWidth() / 2
+    //     const h = this.canvas.getHeight() / 2
+    //     obj.set('left', w - ow)
+    //     obj.set('top', h - oh)
+    //     this.canvas.renderAll()
+    //   }, 1000)
+    // },
+
+    move (direction, num) {
+      const obj = this.canvas.getActiveObject()
+      obj.animate(direction, num, {
+        duration: 0,
+        easing: '', // fabric.util.ease.easeOutBounce
+        onChange: this.canvas.renderAll.bind(this.canvas)
+      })
+    },
+
+    leftright (e) {
+      const object = this.canvas.getActiveObject()
+      if (!object) {
+        alert('请选中对象')
+        return
+      }
+      const dir = e.target.dataset.direction === 'true' ? 1 : 0
+      e.target.dataset.direction = !dir
+      object.set('flipX', !dir)
+      this.canvas.renderAll()
+    },
+
+    topbottom (e) {
+      const object = this.canvas.getActiveObject()
+      if (!object) {
+        alert('请选中对象')
+        return
+      }
+      const dir = e.target.dataset.direction === 'true' ? 1 : 0
+      e.target.dataset.direction = !dir
+      object.set('flipY', !dir)
+      this.canvas.renderAll()
+    },
+
     targerBlur () {
       const text = Text('')
       this.canvas.add(text)
       this.canvas.setActiveObject(text)
-      this.clearObject()
+      this.clearObj()
       // this.canvas.discardActiveObject()
       // this.canvas.deactivateAllWithDispatch()
       // this.canvas.discardActiveGroup()
@@ -103,8 +180,92 @@ export default {
       this.canvas.requestRenderAll()
     },
 
-    filter () {
+    blur () {
+      const object = this.canvas.getActiveObject()
+      if (!object && !object.filters) {
+        alert('不是图片 或 没有选中图形')
+        return
+      }
+      const filter = new fabric.Image.filters.Blur({
+        blur: 0.5
+      })
+      object.filters = []
+      object.filters.push(filter)
+      object.applyFilters()
+      this.canvas.renderAll()
+    },
 
+    brightness () {
+      const object = this.canvas.getActiveObject()
+      if (!object && !object.filters) {
+        alert('不是图片 或 没有选中图形')
+        return
+      }
+      const filter = new fabric.Image.filters.Brightness({
+        brightness: 0.5
+      })
+      object.filters = []
+      object.filters.push(filter)
+      object.applyFilters()
+      this.canvas.renderAll()
+    },
+
+    saturation () {
+      const object = this.canvas.getActiveObject()
+      if (!object && !object.filters) {
+        alert('不是图片 或 没有选中图形')
+        return
+      }
+      const filter = new fabric.Image.filters.Saturation({
+        saturation: 0.8
+      })
+      object.filters = []
+      object.filters.push(filter)
+      object.applyFilters()
+      this.canvas.renderAll()
+    },
+
+    grayscale () {
+      const object = this.canvas.getActiveObject()
+      if (!object && !object.filters) {
+        alert('不是图片 或 没有选中图形')
+        return
+      }
+      const filter = new fabric.Image.filters.Grayscale()
+      object.filters = []
+      object.filters.push(filter)
+      object.applyFilters()
+      this.canvas.renderAll()
+    },
+
+    pixelate () {
+      const object = this.canvas.getActiveObject()
+      if (!object || !object.filters) {
+        alert('不是图片 或 没有选中图形')
+        return
+      }
+      const filter = new fabric.Image.filters.Pixelate({
+        blocksize: 6
+      })
+      object.filters = []
+      object.filters.push(filter)
+      object.applyFilters()
+      this.canvas.renderAll()
+    },
+
+    contrast () {
+      const object = this.canvas.getActiveObject()
+      if (!object || !object.filters) {
+        alert('不是图片 或 没有选中图形')
+        return
+      }
+      const filter = new fabric.Image.filters.Contrast({
+        contrast: 4
+      })
+      object.filters = []
+      object.filters.push(filter)
+      object.applyFilters()
+      this.canvas.renderAll()
     },
 
     modifyCanvas () {
@@ -116,7 +277,7 @@ export default {
       }
     },
 
-    clearObject () {
+    clearObj () {
       this.canvas.remove.apply(this.canvas, this.canvas.getActiveObjects()) // 删除的元素还原回来
       this.canvas.discardActiveObject()
     },
@@ -135,6 +296,17 @@ export default {
       const itext = IText('哈哈')
       this.canvas.add(itext)
       // this.canvas.setActiveObject(itext)
+    },
+
+    opacity () {
+      const object = this.canvas.getActiveObject()
+      if (!object) {
+        alert('没有选中对象')
+        return
+      }
+      const opacity = document.querySelector('#opacity').value
+      object.set('opacity', opacity)
+      this.canvas.renderAll()
     },
 
     addTextBox () {
@@ -333,7 +505,6 @@ export default {
   }
   .container .start {
     padding: 20px 10px;
-    text-align: center;
   }
   .min_input {
     width: 60px;

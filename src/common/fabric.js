@@ -50,7 +50,7 @@ export const Canvas = (name) => {
   return new fabric.Canvas(name, Object.assign({}, {
     // width: '',
     // height: '',
-    renderOnAddRemove: true // 焦点后显示
+    // renderOnAddRemove: true // 焦点后显示
   }))
 }
 
@@ -64,8 +64,15 @@ export const Image = (img) => {
   return new fabric.Image(img, conf)
 }
 
-export const Filter = (img) => {
-  img.filters.push(new fabric.Image.filters.Grayscale())
-  img.applyFilters()
-  return img
+
+export const Filter = (state) => {
+  switch (state) {
+    case 'blur':
+
+      break
+  }
+
+  // img.filters.push(new fabric.Image.filters.Grayscale())
+  // img.applyFilters()
+  // return img
 }
