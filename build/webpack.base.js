@@ -12,6 +12,7 @@ const conf = {
       'vue',
       'vue-router',
       // 'fabric',
+      './src/common/iconfont/iconfont.css',
       './src/common/common.css'
     ]
   },

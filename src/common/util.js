@@ -70,34 +70,24 @@ export const loadGif = (buffer, opt) => {
 export const createElement = (name, opt) => {
   const el = document.createElement(name)
 
-  if (opt.width) {
-    el.width = opt.width
-  }
+  if (opt.width) el.width = opt.width
 
-  if (opt.height) {
-    el.height = opt.height
-  }
+  if (opt.height) el.height = opt.height
 
-  if (opt.title) {
-    el.title = opt.title
-  }
+  if (opt.title) el.title = opt.title
 
-  if (opt.src) {
-    el.src = opt.src
-  }
+  if (opt.src) el.src = opt.src
 
-  if (opt.father) {
-    opt.father.appendChild(el)
-  }
+  if (opt.id) el.id = opt.id
 
-  if (opt.callback) {
-    opt.callback(el)
-  }
+  if (opt.father) opt.father.appendChild(el)
+
+  if (opt.callback) opt.callback(el)
 
   return el
 }
 
-export const preloadingImg = (src) => {
+export const loadingImg = (src) => {
   return new Promise((resolve, reject) => {
     const img = new Image()
     img.onload = (e) => {

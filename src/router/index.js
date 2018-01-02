@@ -1,44 +1,33 @@
 import Router from 'vue-router'
 
-const Home = r => require.ensure([], () => r(require('../pages/Home.vue')), 'home')
+const Make = r => require.ensure([], () => r(require('../pages/Make.vue')), 'make')
+// const Demo = r => require.ensure([], () => r(require('../pages/Demo.vue')), 'demo')
+const Demo2 = r => require.ensure([], () => r(require('../pages/Demo2.vue')), 'demo2')
 
 Vue.use(Router)
 
 const router = new Router({
-  path: '/',
+  // path: '/',
   mode: 'history',
   routes: [
     {
-      path: 'compression',
-      name: 'compression',
-      component: Home
-    },
-    {
-      path: 'cut',
-      name: 'cut',
-      component: Home
-    },
-    {
-      path: 'editor',
-      name: 'editor',
-      component: Home
-    },
-    {
-      path: 'video',
-      name: 'video',
-      component: Home
-    },
-    {
-      path: 'gifTool',
-      name: 'gifTool',
-      component: Home
-    },
-    {
-      path: 'demo',
+      path: '/make',
+      name: 'make',
+      component: Make
+    }, {
+      path: '/demo',
       name: 'demo',
-      component: Home
+      component: Demo2
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  next()
+})
+
+// router.beforeResolve(() => {
+
+// })
 
 export default router

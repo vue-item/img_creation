@@ -21,8 +21,9 @@ li {
 }
 
 body {
-  font-size: 14px;
+  font-size: 12px;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  color: #666;
   -webkit-font-smoothing: antialiased;
   -webkit-overflow-scrolling: touch;
 }
@@ -32,6 +33,8 @@ body::-webkit-scrollbar {
 }
 
 input, textarea, button {
+  padding: 0;
+  border: 0;
   outline: none;
 }
 
@@ -48,6 +51,19 @@ button {
   background: transparent;
 }
 
+.mb {
+  margin-bottom: 12px;
+}
+
+.iconfont {
+  color: #666;
+  font-size: 12px;
+}
+
+.f10 {
+  font-size: 10px;
+}
+
 .f12 {
   font-size: 12px;
 }
@@ -60,10 +76,24 @@ button {
   font-size: 16px;
 }
 
+.bb {
+  border-bottom: 1px solid #DCDCDC;
+}
+
+.br {
+  border: 1px solid #DCDCDC;
+}
 .flex {
   display: flex;
-  align-items: center;
   justify-content: center;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+.flex_items {
+  align-items: center;
 }
 
 .blue {

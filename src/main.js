@@ -1,12 +1,9 @@
 import App from './pages/App'
-import './common/lib/gif'
-import './common/lib/Blob'
-import './common/lib/canvas-toBlob'
-// import router from './router'
+import router from './router'
 
 new Vue({
   // store,
-  // router,
+  router,
   el: '#root',
   render: h => h(App),
   renderError (h, err) {
