@@ -2,13 +2,13 @@
   <div id="app">
     <router-view></router-view>
     <div class="header"></div>
-
+<!--
     <div class="footer_record">
       <a class="footer_record_href" target="_blank" href="http://www.miitbeian.gov.cn">
         <img class="footer_record_logo" src="http://www.doutula.com/build/img/gab.png" />
         沪ICP备 15034960 号-5
       </a>
-    </div>
+    </div> -->
   </div>
 </template>
 
