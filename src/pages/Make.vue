@@ -7,18 +7,24 @@
 
       <div class="operating_area">
 
-        <div v-show="text" class="operating_area_text">
-
+        <div class="operating_area_text">
           <textarea @input="textChange" ref="textarea" class="text_area bb f16" placeholder="文本编辑区" maxlength="250" rows="1" tabindex="0"></textarea>
 
-          <div class="start">
-            <div class="color_box br">
-              <input class="color_input" @input="textStyle($event, 'color')" type="color" name="color">
-              <i class="iconfont icon-jiantou"></i>
-            </div>
-            <div class="color_box br">
-              <input class="color_input" @input="textStyle($event, 'bg')" type="color" name="color">
-              <i class="iconfont icon-jiantou"></i>
+          <div class="start flex bb">
+            <div class="title">颜色</div>
+            <div class="flex1"></div>
+            <div class="flex">
+              <div class="color_box br" style="margin-right: 12px;">
+                <span>字体</span>
+                <input class="color_input" @input="textStyle($event, 'color')" type="color" name="color">
+                <i class="iconfont icon-jiantou"></i>
+              </div>
+
+              <div class="color_box br">
+                <span>背景</span>
+                <input class="color_input" @input="textStyle($event, 'bg')" type="color" name="color">
+                <i class="iconfont icon-jiantou"></i>
+              </div>
             </div>
           </div>
 
@@ -26,12 +32,12 @@
             <div class="title">字体</div>
             <div class="flex1"></div>
             <div class="flex br bg">
-              <button @click="textStyle($event, 'solid')" class="iconfont icon-jiacu f12"></button>
+              <view-font></view-font>
             </div>
           </div>
 
           <div class="start flex bb">
-            <div class="title">修饰符</div>
+            <div class="title">修饰</div>
             <div class="flex1"></div>
             <div class="flex br bg">
               <button @click="textStyle($event, 'solid')" class="iconfont icon-jiacu f12"></button>
@@ -50,13 +56,14 @@
             <div class="title">操作</div>
             <div class="flex1"></div>
             <div class="flex br bg">
-              <button @click="clear" class="iconfont icon-lajitong f14"></button>
-              <button @click="copy" class="iconfont icon-fuzhi f14"></button>
+              <button @click="clear('only')" class="iconfont icon-lajitong f16"></button>
+              <div class="hr"></div>
+              <button @click="copy" class="iconfont icon-fuzhi f16"></button>
             </div>
           </div>
 
           <div class="start flex bb">
-            <div class="title">字体大小</div>
+            <div class="title">大小</div>
             <div class="flex1"></div>
             <div class="flex br bg">
               <button @click="textAlign('small')" class="iconfont icon-A f10"></button>
@@ -66,22 +73,12 @@
           </div>
 
           <div class="start flex bb">
-            <div class="title">层级调整</div>
+            <div class="title">层级</div>
             <div class="flex1"></div>
             <div class="flex br bg">
-              <button @click="textStyle($event, 'bringForward')" class="iconfont icon-shangyiyiceng1 f14"></button>
+              <button @click="textStyle($event, 'bringForward')" class="iconfont icon-shangyiyiceng1 f16"></button>
               <div class="hr"></div>
-              <button @click="textStyle($event, 'sendBackwards')" class="iconfont icon-xiayiyiceng2 f14"></button>
-            </div>
-          </div>
-
-          <div class="start flex bb">
-            <div class="title">透明度</div>
-            <div class="flex1"></div>
-            <div class="flex br bg">
-              <button @click="textStyle($event, 'opacity_add')" class="iconfont icon-jia f14"></button>
-              <div class="hr"></div>
-              <button @click="textStyle($event, 'opacity_reduce')" class="iconfont icon-minus f14"></button>
+              <button @click="textStyle($event, 'sendBackwards')" class="iconfont icon-xiayiyiceng2 f16"></button>
             </div>
           </div>
 
@@ -95,21 +92,29 @@
             </div>
           </div>
 
+          <div class="start flex bb">
+            <div class="title">透明度</div>
+            <div class="flex1"></div>
+            <div class="flex br bg" style="padding: 0 6px;">
+              <input type="range" name="opacity" min="0" max="10" value="10" @input="textStyle($event, 'opacity')">
+            </div>
+          </div>
+
           <div class="start">
             <div class="title mb">对齐方式</div>
             <div class="flex mb bg br">
-              <button @click="textAlign('right')" class="iconfont flex1 icon-youduiqi"></button>
+              <button @click="textAlign('right')" class="iconfont flex1 icon-youduiqi f12"></button>
               <div class="hr"></div>
-              <button @click="textAlign('center')"  class="iconfont flex1 icon-duiqi-shuiping"></button>
+              <button @click="textAlign('center')"  class="iconfont flex1 icon-duiqi-shuiping f12"></button>
               <div class="hr"></div>
-              <button @click="textAlign('left')"  class="iconfont flex1 icon-zuoduiqi_icon"></button>
+              <button @click="textAlign('left')"  class="iconfont flex1 icon-zuoduiqi_icon f12"></button>
             </div>
             <div class="flex bg br">
-              <button @click="textAlign('top')" class="iconfont flex1 icon-duiqi-shang"></button>
+              <button @click="textAlign('top')" class="iconfont flex1 icon-duiqi-shang f12"></button>
               <div class="hr"></div>
-              <button @click="textAlign('vertical')" class="iconfont flex1 icon-duiqi-chuizhi"></button>
+              <button @click="textAlign('vertical')" class="iconfont flex1 icon-duiqi-chuizhi f12"></button>
               <div class="hr"></div>
-              <button @click="textAlign('bottom')" class="iconfont flex1 icon-duiqi-xia"></button>
+              <button @click="textAlign('bottom')" class="iconfont flex1 icon-duiqi-xia f12"></button>
             </div>
           </div>
 
@@ -121,50 +126,50 @@
         </div>
       </div>
     </div>
-
-    <div class="menu">
-      <div @click="shapeShow=true" class="iconfont icon-graph-copy" style="font-weight: 900;"></div>
-      <div @click="itextShow=true" class="iconfont icon-tianjiawenben"></div>
-      <div @click="imageShow=true" class="iconfont icon-tianjiatupian" style="position: relative;overflow: hidden;"><input ref="file" class="file" type="file" name="file" v-on:change="imgFile" accept="image/gif" /></div>
-      <div class="iconfont"><input class="color" type="color" name="color" value="#ffffff" v-on:change="changeColor" /></div>
-      <div @click="clearObj('all')" class="iconfont icon-lajitong1"></div>
-    </div>
-    <list v-on:toggle="toggle" :list="shape" :show="shapeShow" />
-    <list v-on:toggle="toggle" :list="itext" :show="itextShow" />
-    <list v-on:toggle="toggle" :list="image" :show="imageShow" />
-    <url :show="urlShow" :toggle="imgRead"></url>
+    <view-menu :open="menuOpen" ref="menu"  />
+    <list v-on:toggle="toggle" :list="list.shape" :show="config.shape" />
+    <list v-on:toggle="toggle" :list="list.text" :show="config.text" />
+    <list v-on:toggle="toggle" :list="list.image" :show="config.image" />
+    <url :toggle="menuOpen" :show="config.url"  />
   </div>
 </template>
 
 <script>
-  import { shape, text, image } from '../api/data'
-  import { createElement, fileReader, loadingImg } from '../common/util'
-  import loading from '../common/loading'
-  import List from '../components/List'
-  import Url from '../components/Url'
-  import cs from '../common/canvas'
+  import { image, text, shape } from '@api/data'
+  import { createElement } from '@common/util'
+  import canvas from '@common/canvas'
+  import List from '@components/List'
+  import ViewMenu from '@components/Menu'
+  import Url from '@components/Url'
+  import ViewFont from '@components/Font'
+  // http://fabricjs.com/controls // 图片形状移动
 
   export default {
     name: 'make',
     data () {
       return {
-        text: true,
-        shape: shape,
-        shapeShow: false,
-        itext: text,
-        itextShow: false,
-        image: image,
-        imageShow: false,
-        urlShow: false
+        config: {
+          shape: false,
+          text: false,
+          image: false,
+          url: false
+        },
+        list: {
+          shape,
+          text,
+          image
+        }
       }
     },
     components: {
       List,
-      Url
+      Url,
+      ViewMenu,
+      ViewFont
     },
     mounted () {
       const f = this.$refs.area
-      cs.set(createElement('canvas', {
+      canvas.set(createElement('canvas', {
         id: 'canvas',
         width: f.offsetWidth / 2,
         height: f.offsetHeight / 2,
@@ -172,69 +177,71 @@
       }), {
         preserveObjectStacking: true
       })
-      cs.setBgColor('#ffffff')
-      cs.canvas.on({
+      canvas.setBgColor('#ffffff')
+      canvas.canvas.on({
         'object:selected': (e) => {
           const tar = e.target
           if (tar && tar.type && tar.type === 'text') {
             this.$refs.textarea.value = e.target.text
-            // this.text = true
           } else if (!tar) {
-            // this.text = false
+            //
           }
         }
       })
     },
     methods: {
-      changeColor (e) { cs.setBgColor(e.target.value) },
-      copy () { cs.clone() },
+      menuOpen (type, state = true) {
+        this.config[type] = state
+      },
+      copy: canvas.clone.bind(canvas),
+      clear: canvas.clear.bind(canvas),
       toggle (obj) {
         if (obj.type === 'Rect' || obj.type === 'Circle' || obj.type === 'Triangle' || obj.type === 'Line') {
-          this.shapeShow = false
-          if (obj.type) cs.create(obj.type, { active: true })
+          this.config.shape = false
+          if (obj.type) canvas.create(obj.type, { active: true })
         } else if (obj.type === 'Text' || obj.type === 'IText' || obj.type === 'Textbox') {
-          this.itextShow = false
-          if (obj.type) cs.create(obj.type, '请输入你的文字', { active: true })
+          this.config.text = false
+          if (obj.type) canvas.create(obj.type, '请输入你的文字', { active: true })
         } else if (obj.type === 'file') {
           setTimeout(() => {
-            this.$refs.file.click()
-            this.imageShow = false
+            this.$refs.menu.$refs.file.click()
+            this.config.image = false
           }, 200)
         } else if (obj.type === 'url') {
-          this.imageShow = false
-          this.urlShow = true
+          this.config.image = false
+          this.config.url = true
         } else {
-          this.shapeShow = false
-          this.itextShow = false
-          this.imageShow = false
+          this.config.shape = false
+          this.config.text = false
+          this.config.image = false
         }
       },
       textChange (e) {
-        const obj = cs.getActiveObject()
-        const val = e.target.value.replace(/\s/g, '')
-        if (obj) cs.style({ text: val })
+        const obj = canvas.getActiveObject()
+        const text = e.target.value.replace(/\s/g, '')
+        if (obj && text) canvas.style({ text })
       },
       textAlign (position) {
-        const conf = cs.textReset()
+        const conf = canvas.textReset()
         conf.d.active = true
         switch (position) {
           case 'left':
-            conf.d.left = cs.mr
+            conf.d.left = canvas.mr
             break
           case 'center':
-            conf.d.left = cs.canvas.width / 2 - conf.w / 2
+            conf.d.left = canvas.canvas.width / 2 - conf.w / 2
             break
           case 'right':
-            conf.d.left = cs.canvas.width - conf.w - cs.mr
+            conf.d.left = canvas.canvas.width - conf.w - canvas.mr
             break
           case 'top':
-            conf.d.top = cs.mr
+            conf.d.top = canvas.mr
             break
           case 'vertical':
-            conf.d.top = cs.canvas.height / 2 - conf.h / 2
+            conf.d.top = canvas.canvas.height / 2 - conf.h / 2
             break
           case 'bottom':
-            conf.d.top = cs.canvas.height - conf.h - cs.mr
+            conf.d.top = canvas.canvas.height - conf.h - canvas.mr
             break
           case 'small':
             conf.d.fontSize = conf.f - 1
@@ -243,79 +250,49 @@
             conf.d.fontSize = conf.f + 1
             break
         }
-        cs.create('Text', '', conf.d)
+        canvas.create('Text', '', conf.d)
       },
       textStyle (e, type) {
-        const obj = cs.getActiveObject()
+        const obj = canvas.getActiveObject()
         switch (type) {
           case 'solid':
-            cs.style({ fontWeight: obj.fontWeight === 'normal' ? '900' : 'normal' })
+            canvas.style({ fontWeight: obj.fontWeight === 'normal' ? '900' : 'normal' })
             break
           case 'italic':
-            cs.style({ fontStyle: obj.fontStyle === 'normal' ? 'italic' : 'normal' })
+            canvas.style({ fontStyle: obj.fontStyle === 'normal' ? 'italic' : 'normal' })
             break
           case 'overline':
-            cs.style({ overline: !obj.overline })
+            canvas.style({ overline: !obj.overline })
             break
           case 'linethrough':
-            cs.style({ linethrough: !obj.linethrough })
+            canvas.style({ linethrough: !obj.linethrough })
             break
           case 'underline':
-            cs.style({ underline: !obj.underline })
+            canvas.style({ underline: !obj.underline })
             break
           case 'bg':
-            cs.style({ textBackgroundColor: e.target.value })
+            canvas.style({ textBackgroundColor: e.target.value })
             break
           case 'color':
-            cs.style({ fill: e.target.value })
+            canvas.style({ fill: e.target.value })
             break
-          case 'opacity_reduce':
-            cs.style({ opacity: obj.opacity - 0.1 })
-            break
-          case 'opacity_add':
-            cs.style({ opacity: obj.opacity + 0.1 })
+          case 'opacity':
+            canvas.style({ opacity: e.target.value / 10 })
             break
           case 'flipX':
           case 'flipY':
             const flip = {}
             flip[type] = obj[type] ? 0 : 1
-            cs.style(flip)
+            canvas.style(flip)
             break
           case 'bringForward':
           case 'sendBackwards':
-            cs.position(type)
+            canvas.position(type)
             break
           case 'save':
-            cs.save('#canvas', 'node.png')
+            canvas.save('#canvas', 'node.png')
             break
         }
-      },
-      clearObj (type) { cs.clear(type) },
-      imgRead (src) {
-        // 验证url 是否为图片格式
-        if (src) {
-          loading.show()
-          loadingImg(src)
-          .then((res) => {
-            cs.fromURL(res)
-            loading.hide()
-          })
-        }
-        this.urlShow = false
-      },
-      imgFile (e) {
-        loading.show()
-        cs.blur()
-        const tar = e.target.files[0]
-        fileReader(tar, {
-          readAsDataURL: true,
-          onload (d) {
-            loadingImg(d).then((res) => {
-              cs.fromURL(res)
-              loading.hide()
-            })
-          }
-        })
       }
     }
   }
@@ -335,11 +312,11 @@
     position: relative;
     flex: 1;
     border: 0;
-    background-color: #F4F3F4;
+    background-color: #fff;
   }
   .make .operating_area {
     position: relative;
-    width: 240px;
+    width: 260px;
     border-left: 1px solid #DCDCDC;
     background-color: #F5F5F5;
   }
@@ -352,14 +329,27 @@
     text-indent: 12px;
   }
   .operating_area .color_box {
+    position: relative;
     display: inline-block;
     vertical-align: middle;
+    padding: 0 26px 0 2px;
+    border-radius: 3px;
     background: #fff;
+    font-size: 12px;
   }
   .operating_area .color_input {
-    width: 32px;
-    height: 32px;
-    line-height: 28px;
+    overflow: hidden;
+    width: 26px;
+    height: 26px;
+    border-radius: 3px;
+  }
+  .operating_area .color_box .icon-jiantou {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -6px;
+    font-size: 12px;
+    color: #999;
   }
   .operating_area .theme .icon-jiantou {
     position: absolute;
@@ -381,6 +371,7 @@
   }
   .operating_area .hr {
     width: 1px;
+    height: 10px;
     background-color: #DCDCDC;
   }
   .operating_area .start {
@@ -396,7 +387,7 @@
     background-color: #fff;
   }
   .operating_area .flex {
-    height: 22px;
+    height: 28px;
     border-radius: 3px;
   }
   .operating_area .flex .iconfont:before {
@@ -413,42 +404,16 @@
     height: 40px;
     line-height: 40px;
     text-align: center;
-    border-top: 1px solid #dcdcdc;
-  }
-  .menu {
-    position: fixed;
-    left: 12px;
-    top: 50%;
-    align-items: flex-start;
-    text-align: center;
-    transform: translateY(-50%);
-    border: 1px solid #DCDCDC;
-  }
-  .menu .iconfont {
-    overflow: hidden;
-    width: 46px;
-    height: 46px;
-    line-height: 46px;
-    font-size: 26px;
     background-color: #fff;
-    cursor: pointer;
-    border-bottom: 1px solid #DCDCDC;
+    border-top: 1px solid #F4F3F4;
   }
-  .menu .iconfont:last-child {
-    border-bottom: 0;
+  .operating_area .operating_area_text {
+    padding-bottom: 53px;
   }
-  .menu .file {
-    position: absolute;
-    left: 0;
-    top: 100px;
-    opacity: 0;
-    cursor: pointer;
+  .operating_area_text .flex {
+    align-items: center;
   }
-  .menu .color {
-    width: 32px;
-    height: 32px;
-  }
-  .draw {
+  .draw_area .draw {
     position: absolute;
     left: 50%;
     top: 50%;

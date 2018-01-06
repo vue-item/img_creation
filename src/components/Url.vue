@@ -3,7 +3,7 @@
     <div class="url_bg">
       <sup style="color: #666;">每次只能上传一张图片，上传的图片不超过10MB</sup>
       <div>
-        <input id="url_input" class="url_input" type="text" name="text" placeholder="请帖入图片地址" />
+        <input ref="url" @keyup.enter="target" id="url_input" class="url_input" type="text" name="text" placeholder="请帖入图片地址" />
       </div>
       <div class="url_box">
         <button class="url_btn url_gray_btn" @click="target">取消</button>
@@ -15,6 +15,10 @@
 </template>
 
 <script>
+  import { loadingImg } from '@common/util'
+  import loading from '@common/loading'
+  import canvas from '@common/canvas'
+
   export default {
     props: {
       show: false,
@@ -26,9 +30,26 @@
       }, 400)
     },
     methods: {
-      target () {
-        const val = document.querySelector('#url_input').value.replace(/\s/g, '')
-        this.toggle(val)
+      target (e) {
+        const cla = e.target.className
+        if (cla === 'iconfont icon-close2' || cla === 'url_btn url_gray_btn') {
+          this.toggle('url', false)
+          return
+        }
+        // 验证url 是否为图片格式
+        const val = this.$refs.url.value.replace(/\s/g, '')
+        if (val) {
+          loading.show()
+          loadingImg(val)
+          .then((res) => {
+            this.$refs.url.value = ''
+            canvas.fromURL(res)
+            this.toggle('url', false)
+            loading.hide()
+          })
+        } else {
+          this.toggle('url', false)
+        }
       }
     }
   }
@@ -116,7 +137,7 @@
       background-color: rgba(000, 000, 000, 0);
     }
     100% {
-      left: 100vh;
+      left: 100vw;
     }
   }
   @keyframes url_show {

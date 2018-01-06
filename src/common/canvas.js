@@ -162,9 +162,7 @@ const canvas = {
 
   clear (type) {
     const obj = this.canvas.getActiveObjects()
-    if (!obj) {
-      return
-    }
+    if (!obj) return
     switch (type) {
       case 'only':
         this.canvas.remove.apply(this.canvas, this.canvas.getActiveObjects())
@@ -190,7 +188,11 @@ const canvas = {
   save (id, name) {
     const _ = document.querySelector(id)
     _.toBlob((blob) => {
-      saveAs(blob, name)
+      const fr = new FileReader()
+      fr.addEventListener('loadend', () => {
+        saveAs(blob, name)
+      })
+      fr.readAsDataURL(blob)
     })
   },
 
@@ -211,11 +213,12 @@ const canvas = {
       top: (o - data.height * (200 / data.width)) / 2
     }),
     this.canvas.add(t)
+    this.setActive(t)
     this.canvas.renderAll()
   },
 
   clone () {
-    this.canvas.getActiveObject().clone((el) => {
+    this.getActiveObject().clone((el) => {
       el.set({
         left: el.left + 10,
         top: el.top + 10,

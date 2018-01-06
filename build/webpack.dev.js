@@ -17,10 +17,6 @@ const resolve = (dir) => path.join(__dirname, '..', dir)
 const isProd = process.env.NODE_ENV === 'production'
 const g = { Vue: 'vue' }
 
-if (!isProd) {
-  g.log = resolve('./build/utils/log.js')
-}
-
 const webpackConfig = merge(base, {
   module: {
     rules: utils.styleLoaders({ sourceMap: true })

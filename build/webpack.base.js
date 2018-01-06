@@ -11,15 +11,14 @@ const conf = {
     vendor: [
       'vue',
       'vue-router',
-      // 'fabric',
       './src/common/iconfont/iconfont.css',
       './src/common/common.css'
     ]
   },
   output: {
-    path: resolve('dist'), // 输出路径
-    filename: '[name].js', // key
-    chunkFilename: '[name].[chunkhash].js', // 针对异步文件 hash
+    path: resolve('dist'),
+    filename: '[name].js',
+    chunkFilename: '[name].[chunkhash].js',
     publicPath: `//${ip}:3000/dist/`
   },
   resolve: {
@@ -29,18 +28,18 @@ const conf = {
       resolve('node_modules')
     ],
     alias: {
-      // 'fabric': 'fabric/dist/fabric.js',
-      // 'log': resolve('./build/utils/log.js'),
       'vue': 'vue/dist/vue.runtime.min.js',
       'vue-router': 'vue-router/dist/vue-router.min.js',
-      '@': resolve('src/components')
+      '@common': resolve('src/common'),
+      '@components': resolve('src/components'),
+      '@api': resolve('src/api')
     }
   },
   // resolveLoader: {
   //   root: resolve('node_modules')
   // },
   module: {
-    noParse: [/vue\.runtime\.min/, /vue-router\.min/], // 跳过对其的解析来进行优化
+    noParse: [/vue\.runtime\.min/, /vue-router\.min/],
     rules: [
       {
         test: /\.(js|vue)$/,
