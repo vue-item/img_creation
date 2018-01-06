@@ -55,40 +55,40 @@
           <div class="start flex bb">
             <div class="title">操作</div>
             <div class="flex1"></div>
-            <div class="flex br bg">
-              <button @click="clear('only')" class="iconfont icon-lajitong f16"></button>
+            <div class="flex br bg flex2">
+              <button @click="clear('only')" class="iconfont icon-lajitong f16 flex1"></button>
               <div class="hr"></div>
-              <button @click="copy" class="iconfont icon-fuzhi f16"></button>
+              <button @click="copy" class="iconfont icon-fuzhi f16 flex1"></button>
             </div>
           </div>
 
           <div class="start flex bb">
             <div class="title">大小</div>
             <div class="flex1"></div>
-            <div class="flex br bg">
-              <button @click="textAlign('small')" class="iconfont icon-A f10"></button>
+            <div class="flex br bg flex2">
+              <button @click="textAlign('small')" class="iconfont icon-A f10 flex1"></button>
               <div class="hr"></div>
-              <button @click="textAlign('big')" class="iconfont icon-A f16"></button>
+              <button @click="textAlign('big')" class="iconfont icon-A f16 flex1"></button>
             </div>
           </div>
 
           <div class="start flex bb">
             <div class="title">层级</div>
             <div class="flex1"></div>
-            <div class="flex br bg">
-              <button @click="textStyle($event, 'bringForward')" class="iconfont icon-shangyiyiceng1 f16"></button>
+            <div class="flex br bg flex2">
+              <button @click="textStyle($event, 'bringForward')" class="iconfont icon-shangyiyiceng1 f16 flex1"></button>
               <div class="hr"></div>
-              <button @click="textStyle($event, 'sendBackwards')" class="iconfont icon-xiayiyiceng2 f16"></button>
+              <button @click="textStyle($event, 'sendBackwards')" class="iconfont icon-xiayiyiceng2 f16 flex1"></button>
             </div>
           </div>
 
           <div class="start flex bb">
             <div class="title">翻转</div>
             <div class="flex1"></div>
-            <div class="flex br bg">
-              <button @click="textStyle($event, 'flipX')" class="iconfont icon-chuizhifanzhuan f14"></button>
+            <div class="flex br bg flex2">
+              <button @click="textStyle($event, 'flipX')" class="iconfont icon-chuizhifanzhuan f16 flex1"></button>
               <div class="hr"></div>
-              <button @click="textStyle($event, 'flipY')" class="iconfont icon-shuipingfanzhuan f14" ></button>
+              <button @click="textStyle($event, 'flipY')" class="iconfont icon-shuipingfanzhuan f16 flex1" ></button>
             </div>
           </div>
 

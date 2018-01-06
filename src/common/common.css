@@ -99,7 +99,9 @@ button {
 .flex1 {
   flex: 1;
 }
-
+.flex2 {
+  flex: 2;
+}
 .flex_items {
   align-items: center;
 }
