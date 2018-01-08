@@ -47,7 +47,6 @@ const pad = (str, length) => {
 }
 
 const getRandomInt = fabric.util.getRandomInt
-
 const getRandomColor = () => {
   return (
     pad(getRandomInt(0, 255).toString(16), 2) +
@@ -245,7 +244,7 @@ const canvas = {
   applyFilterValue (i, prop, value) {
     const obj = this.getActiveObject()
     if (obj.filters[i]) {
-      obj.filters[index][prop] = value
+      obj.filters[i][prop] = value
       obj.applyFilters()
       this.canvas.renderAll()
     }

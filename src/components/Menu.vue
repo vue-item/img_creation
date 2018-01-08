@@ -3,7 +3,7 @@
     <div v-on:click="target('shape')" class="iconfont icon-graph-copy" style="font-weight: 900;"></div>
     <div v-on:click="target('text')" class="iconfont icon-tianjiawenben"></div>
     <div v-on:click="target('image')" class="iconfont icon-tianjiatupian" style="position: relative;overflow: hidden;">
-      <input ref="file" class="file" type="file" name="file" v-on:change="imgFile" accept="image/gif" />
+      <input ref="file" class="file" type="file" name="file" v-on:change="imgFile" /> <!--accept="image/gif"-->
     </div>
     <div class="iconfont">
       <input class="color" ref="color" type="color" name="color" value="#ffffff" v-on:change="target('color')" />
