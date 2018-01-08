@@ -99,6 +99,7 @@
   $('grayscale').onclick = function() {
     applyFilter(0, this.checked && new f.Grayscale());
   };
+
   $('average').onclick = function() {
     applyFilterValue(0, 'mode', 'average');
   };
@@ -108,6 +109,7 @@
   $('lightness').onclick = function() {
     applyFilterValue(0, 'mode', 'lightness');
   };
+
   $('invert').onclick = function() {
     applyFilter(1, this.checked && new f.Invert());
   };

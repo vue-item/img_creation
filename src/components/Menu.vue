@@ -19,7 +19,7 @@
 
   export default {
     props: {
-      open: Function
+      dialogOpen: Function
     },
     methods: {
       target (name) {
@@ -28,7 +28,7 @@
         } else if (name === 'clear') {
           canvas.clear('all')
         } else {
-          this.open(name)
+          this.dialogOpen(name)
         }
       },
       imgFile (e) {

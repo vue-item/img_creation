@@ -36,6 +36,7 @@ import './lib/Blob'
 import './lib/canvas-toBlob'
 import { saveAs } from 'file-saver'
 import { fabric } from 'fabric'
+import { filter } from '@api/data'
 const f = fabric.Image.filters
 
 const pad = (str, length) => {
@@ -56,6 +57,7 @@ const getRandomColor = () => {
 }
 
 const canvas = {
+  filter: '',
   mr: 6,
   tmp: [],
   set (name, opt = {}) {
@@ -79,6 +81,7 @@ const canvas = {
       params.top = getRandomInt(0 + offset, this.canvas.height - offset)
       params.fill = '#' + getRandomColor(),
       params.opacity = 0.8
+
       if (name === 'Circle') {
         params['radius'] = offset
       } else if (name === 'Rect') {
@@ -91,6 +94,7 @@ const canvas = {
         params['width'] = offset
         params['height'] = offset
       }
+
       const conf = Object.assign(params, opt)
       if (name === 'Line') {
         obj = new fabric[name]([50, 100, 200, 200], conf)
@@ -185,12 +189,12 @@ const canvas = {
     }
   },
 
-  save (id, name) {
-    const _ = document.querySelector(id)
+  save () {
+    const _ = document.querySelector('#canvas')
     _.toBlob((blob) => {
       const fr = new FileReader()
       fr.addEventListener('loadend', () => {
-        saveAs(blob, name)
+        saveAs(blob, 'node.png')
       })
       fr.readAsDataURL(blob)
     })
@@ -222,7 +226,7 @@ const canvas = {
       el.set({
         left: el.left + 10,
         top: el.top + 10,
-        evented: true,
+        evented: true
       })
     if (el.type === 'activeSelection') {
         el.canvas = this.canvas
@@ -236,6 +240,26 @@ const canvas = {
       this.canvas.setActiveObject(el)
       this.canvas.requestRenderAll()
     })
+  },
+
+  applyFilterValue (i, prop, value) {
+    const obj = this.getActiveObject()
+    if (obj.filters[i]) {
+      obj.filters[index][prop] = value
+      obj.applyFilters()
+      this.canvas.renderAll()
+    }
+  },
+
+  applyFilter (index, state) {
+    const obj = this.getActiveObject()
+    if (state) {
+      obj.filters[index] = new f.Grayscale()
+    } else {
+      obj.filters[index] = undefined
+    }
+    obj.applyFilters()
+    this.canvas.renderAll()
   }
 }
 

@@ -23,6 +23,32 @@ export const shape = [{
   class: 'iconfont icon-zhixianxianduan'
 }]
 
+export const filter = [
+  'grayscale',
+  'invert',
+  'remove-color',
+  'sepia',
+  'brownie',
+  'brightness',
+  'contrast',
+  'saturation',
+  'noise',
+  'vintage',
+  'pixelate',
+  'blur',
+  'sharpen',
+  'emboss',
+  'technicolor',
+  'polaroid',
+  'blend-color',
+  'gamma',
+  'kodachrome',
+  'blackwhite',
+  'blend-image',
+  'hue',
+  'resize'
+]
+
 export const text = [{
   text: '文本',
   type: 'Text',
