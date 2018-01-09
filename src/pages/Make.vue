@@ -1,6 +1,6 @@
 <template>
   <div class="make">
-    <div class="flex">
+    <div class="make_container flex">
       <div ref="area" class="draw_area">
         <div ref="draw" class="draw"></div>
       </div>
@@ -50,7 +50,7 @@
           image,
           textarea: ''
         },
-        state: 'img'
+        state: ''
       }
     },
     components: {
@@ -61,6 +61,7 @@
       ViewImage
     },
     mounted () {
+      const self = this
       const f = this.$refs.area
       canvas.set(createElement('canvas', {
         id: 'canvas',
@@ -73,19 +74,25 @@
       canvas.setBgColor('#ffffff')
       canvas.canvas.on({
         'object:selected': (e) => {
-          const tar = e.target
-          if (!tar) return
-          if (tar.type === 'text') {
-            this.list.textarea = tar.text
-            this.state = 'text'
-            console.log(this.state)
-          } else if (tar.type === 'image') {
-            this.state = 'img'
-          }
+          self.changeState(e.target)
+        },
+        'mouse:down': (e) => {
+          self.changeState(e.target)
         }
       })
     },
     methods: {
+      changeState (tar) {
+        if (!tar) return
+        if (tar.type === 'text') {
+          this.list.textarea = tar.text
+          this.state = 'text'
+        } else if (tar.type === 'image') {
+          this.state = 'img'
+        } else {
+          this.state = ''
+        }
+      },
       save: canvas.save,
       changeText (e, type) {
         const obj = canvas.getActiveObject()
@@ -205,7 +212,7 @@
   .make button {
     cursor: pointer;
   }
-  .make .flex {
+  .make .make_container {
     height: calc(100vh - 50px);
   }
   .make .draw_area {
@@ -237,7 +244,6 @@
     padding: 10px 12px;
   }
   .operating_area .flex {
-    height: 28px;
     border-radius: 3px;
     align-items: center;
   }

@@ -250,18 +250,23 @@ const canvas = {
     }
   },
 
-  applyFilter (index, state) {
+  applyFilter (i, state, opt={}) {
     const obj = this.getActiveObject()
     if (state) {
-      obj.filters[index] = new f.Grayscale()
+      const ff = f[filter[i]]
+      obj.filters[i] = new ff(opt)
     } else {
-      obj.filters[index] = undefined
+      obj.filters[i] = undefined
     }
     obj.applyFilters()
     this.canvas.renderAll()
+  },
+
+  getFilter (i) {
+    const obj = this.canvas.getActiveObject()
+    return obj.filters[i]
   }
 }
-
 
 export default canvas
 

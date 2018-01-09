@@ -13,10 +13,10 @@
     canvas.renderAll()
   }
 
-  function getFilter(index) {
-    var obj = canvas.getActiveObject()
-    return obj.filters[index]
-  }
+  // function getFilter(index) {
+  //   var obj = canvas.getActiveObject()
+  //   return obj.filters[index]
+  // }
 
   function applyFilterValue(index, prop, value) {
     var obj = canvas.getActiveObject()
@@ -93,12 +93,13 @@
   $('kodachrome').onclick = function() {
     applyFilter(18, this.checked && new f.Kodachrome());
   };
-  $('blackwhite').onclick = function() {
-    applyFilter(19, this.checked && new f.BlackWhite());
-  };
-  $('grayscale').onclick = function() {
-    applyFilter(0, this.checked && new f.Grayscale());
-  };
+  // $('blackwhite').onclick = function() {
+  //   applyFilter(19, this.checked && new f.BlackWhite());
+  // };
+
+  // $('grayscale').onclick = function() {
+  //   applyFilter(0, this.checked && new f.Grayscale());
+  // };
 
   $('average').onclick = function() {
     applyFilterValue(0, 'mode', 'average');
@@ -110,24 +111,24 @@
     applyFilterValue(0, 'mode', 'lightness');
   };
 
-  $('invert').onclick = function() {
-    applyFilter(1, this.checked && new f.Invert());
-  };
-  $('remove-color').onclick = function () {
-    applyFilter(2, this.checked && new f.RemoveColor({
-      distance: $('remove-color-distance').value,
-      color: $('remove-color-color').value,
-    }));
-  };
-  $('remove-color-color').onchange = function() {
-    applyFilterValue(2, 'color', this.value);
-  };
-  $('remove-color-distance').oninput = function() {
-    applyFilterValue(2, 'distance', this.value);
-  };
-  $('sepia').onclick = function() {
-    applyFilter(3, this.checked && new f.Sepia());
-  };
+  // $('invert').onclick = function() {
+  //   applyFilter(1, this.checked && new f.Invert());
+  // };
+  // $('remove-color').onclick = function () {
+  //   applyFilter(2, this.checked && new f.RemoveColor({
+  //     distance: $('remove-color-distance').value,
+  //     color: $('remove-color-color').value,
+  //   }));
+  // };
+  // $('remove-color-color').onchange = function() {
+  //   applyFilterValue(2, 'color', this.value);
+  // };
+  // $('remove-color-distance').oninput = function() {
+  //   applyFilterValue(2, 'distance', this.value);
+  // };
+  // $('sepia').onclick = function() {
+  //   applyFilter(3, this.checked && new f.Sepia());
+  // };
   $('brightness').onclick = function () {
     applyFilter(5, this.checked && new f.Brightness({
       brightness: parseFloat($('brightness-value').value)
@@ -136,83 +137,88 @@
   $('brightness-value').oninput = function() {
     applyFilterValue(5, 'brightness', parseFloat(this.value));
   };
-  $('gamma').onclick = function () {
-    var v1 = parseFloat($('gamma-red').value);
-    var v2 = parseFloat($('gamma-green').value);
-    var v3 = parseFloat($('gamma-blue').value);
-    applyFilter(17, this.checked && new f.Gamma({
-      gamma: [v1, v2, v3]
-    }));
-  };
-  $('gamma-red').oninput = function() {
-    var current = getFilter(17).gamma;
-    current[0] = parseFloat(this.value);
-    applyFilterValue(17, 'gamma', current);
-  };
-  $('gamma-green').oninput = function() {
-    var current = getFilter(17).gamma;
-    current[1] = parseFloat(this.value);
-    applyFilterValue(17, 'gamma', current);
-  };
-  $('gamma-blue').oninput = function() {
-    var current = getFilter(17).gamma;
-    current[2] = parseFloat(this.value);
-    applyFilterValue(17, 'gamma', current);
-  };
-  $('contrast').onclick = function () {
-    applyFilter(6, this.checked && new f.Contrast({
-      contrast: parseFloat($('contrast-value').value)
-    }));
-  };
-  $('contrast-value').oninput = function() {
-    applyFilterValue(6, 'contrast', parseFloat(this.value));
-  };
-  $('saturation').onclick = function () {
-    applyFilter(7, this.checked && new f.Saturation({
-      saturation: parseFloat($('saturation-value').value)
-    }));
-  };
-  $('saturation-value').oninput = function() {
-    applyFilterValue(7, 'saturation', parseFloat(this.value));
-  };
-  $('noise').onclick = function () {
-    applyFilter(8, this.checked && new f.Noise({
-      noise: parseInt($('noise-value').value, 10)
-    }));
-  };
-  $('noise-value').oninput = function() {
-    applyFilterValue(8, 'noise', parseInt(this.value, 10));
-  };
-  $('pixelate').onclick = function() {
-    applyFilter(10, this.checked && new f.Pixelate({
-      blocksize: parseInt($('pixelate-value').value, 10)
-    }));
-  };
-  $('pixelate-value').oninput = function() {
-    applyFilterValue(10, 'blocksize', parseInt(this.value, 10));
-  };
-  $('blur').onclick = function() {
-    applyFilter(11, this.checked && new f.Blur({
-      value: parseFloat($('blur-value').value)
-    }));
-  };
-  $('blur-value').oninput = function() {
-    applyFilterValue(11, 'blur', parseFloat(this.value, 10));
-  };
-  $('sharpen').onclick = function() {
-    applyFilter(12, this.checked && new f.Convolute({
-      matrix: [  0, -1,  0,
-                -1,  5, -1,
-                 0, -1,  0 ]
-    }));
-  };
-  $('emboss').onclick = function() {
-    applyFilter(13, this.checked && new f.Convolute({
-      matrix: [ 1,   1,  1,
-                1, 0.7, -1,
-               -1,  -1, -1 ]
-    }));
-  };
+
+  // $('gamma').onclick = function () {
+  //   var v1 = parseFloat($('gamma-red').value);
+  //   var v2 = parseFloat($('gamma-green').value);
+  //   var v3 = parseFloat($('gamma-blue').value);
+  //   applyFilter(17, this.checked && new f.Gamma({
+  //     gamma: [v1, v2, v3]
+  //   }));
+  // };
+  // $('gamma-red').oninput = function() {
+  //   var current = getFilter(17).gamma;
+  //   current[0] = parseFloat(this.value);
+  //   applyFilterValue(17, 'gamma', current);
+  // };
+  // $('gamma-green').oninput = function() {
+  //   var current = getFilter(17).gamma;
+  //   current[1] = parseFloat(this.value);
+  //   applyFilterValue(17, 'gamma', current);
+  // };
+  // $('gamma-blue').oninput = function() {
+  //   var current = getFilter(17).gamma;
+  //   current[2] = parseFloat(this.value);
+  //   applyFilterValue(17, 'gamma', current);
+  // };
+
+  // $('contrast').onclick = function () {
+  //   applyFilter(6, this.checked && new f.Contrast({
+  //     contrast: parseFloat($('contrast-value').value)
+  //   }));
+  // };
+  // $('contrast-value').oninput = function() {
+  //   applyFilterValue(6, 'contrast', parseFloat(this.value));
+  // };
+
+  // $('saturation').onclick = function () {
+  //   applyFilter(7, this.checked && new f.Saturation({
+  //     saturation: parseFloat($('saturation-value').value)
+  //   }));
+  // };
+  // $('saturation-value').oninput = function() {
+  //   applyFilterValue(7, 'saturation', parseFloat(this.value));
+  // };
+  // $('noise').onclick = function () {
+  //   applyFilter(8, this.checked && new f.Noise({
+  //     noise: parseInt($('noise-value').value, 10)
+  //   }));
+  // };
+  // $('noise-value').oninput = function() {
+  //   applyFilterValue(8, 'noise', parseInt(this.value, 10));
+  // };
+
+  // $('pixelate').onclick = function() {
+  //   applyFilter(10, this.checked && new f.Pixelate({
+  //     blocksize: parseInt($('pixelate-value').value, 10)
+  //   }));
+  // };
+  // $('pixelate-value').oninput = function() {
+  //   applyFilterValue(10, 'blocksize', parseInt(this.value, 10));
+  // };
+  // $('blur').onclick = function() {
+  //   applyFilter(11, this.checked && new f.Blur({
+  //     value: parseFloat($('blur-value').value)
+  //   }));
+  // };
+  // $('blur-value').oninput = function() {
+  //   applyFilterValue(11, 'blur', parseFloat(this.value, 10));
+  // };
+  // $('sharpen').onclick = function() {
+  //   applyFilter(12, this.checked && new f.Convolute({
+  //     matrix: [  0, -1,  0,
+  //               -1,  5, -1,
+  //                0, -1,  0 ]
+  //   }));
+  // };
+
+  // $('emboss').onclick = function() {
+  //   applyFilter(13, this.checked && new f.Convolute({
+  //     matrix: [ 1,   1,  1,
+  //               1, 0.7, -1,
+  //              -1,  -1, -1 ]
+  //   }));
+  // };
   $('blend').onclick= function() {
     applyFilter(16, this.checked && new f.BlendColor({
       color: document.getElementById('blend-color').value,
@@ -233,16 +239,16 @@
     applyFilterValue(16, 'alpha', this.value);
   };
 
-  $('hue').onclick= function() {
-    applyFilter(21, this.checked && new f.HueRotation({
-      rotation: document.getElementById('hue-value').value,
-    }));
-  };
+  // $('hue').onclick= function() {
+  //   applyFilter(21, this.checked && new f.HueRotation({
+  //     rotation: document.getElementById('hue-value').value,
+  //   }));
+  // };
+  // $('hue-value').oninput = function() {
+  //   applyFilterValue(21, 'rotation', this.value);
+  // };
 
-  $('hue-value').oninput = function() {
-    applyFilterValue(21, 'rotation', this.value);
-  };
-
+  /* --  --*/
   $('blend-image').onclick= function() {
     applyFilter(20, this.checked && new f.BlendImage({
       image: fImage,

@@ -122,7 +122,9 @@ button {
 .flex_items {
   align-items: center;
 }
-
+.flex_start {
+  justify-content: flex-start; flex-wrap: wrap;
+}
 .blue {
   background-image: linear-gradient(-136deg, #A3D7DD 0%, #B0A2DB 100%);
 }
