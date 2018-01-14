@@ -237,6 +237,7 @@
         } else {
           canvas.filter = null
           const el = document.querySelector('#gray_flex .color_input')
+          console.log(el.length)
           for (let i = 0, len = el.length; i < len; i++) {
             el[i].checked = false // removeAttribute("checked")
           }

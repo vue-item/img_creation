@@ -78,7 +78,7 @@ const conf = {
         loader: 'url-loader',
         query: {
           limit: 10000,
-          name: '[name].[hash:7].[ext]'
+          name: 'images/[name].[hash:7].[ext]'
         }
       }
     ]

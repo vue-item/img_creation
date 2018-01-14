@@ -88,7 +88,7 @@
     <div class="start flex bb">
       <div>透明度</div>
       <div class="flex1"></div>
-      <div class="flex br bg" style="padding: 0 6px;">
+      <div class="flex br bg">
         <input type="range" name="opacity" min="0" max="10" value="10" @input="changeEvent($event, 'opacity')" />
       </div>
     </div>
@@ -96,7 +96,7 @@
     <div class="start flex bb">
       <div>倾斜x</div>
       <div class="flex1"></div>
-      <div class="flex br bg" style="padding: 0 6px;">
+      <div class="flex br bg">
         <input type="range" name="skewX" min="0" max="80" value="0" @input="changeEvent($event, 'skewX')" />
       </div>
     </div>
@@ -104,7 +104,7 @@
     <div class="start flex bb">
       <div>倾斜y</div>
       <div class="flex1"></div>
-      <div class="flex br bg" style="padding: 0 6px;">
+      <div class="flex br bg">
         <input type="range" name="skewY" min="0" max="40" value="0" @input="changeEvent($event, 'skewY')" />
       </div>
     </div>
@@ -112,7 +112,7 @@
     <div class="start flex bb">
       <div>缩放</div>
       <div class="flex1"></div>
-      <div class="flex br bg" style="padding: 0 6px;">
+      <div class="flex br bg">
         <input type="range" name="scale" value="1" min="0.1" max="3" step="0.1" @input="changeEvent($event, 'scale')" />
       </div>
     </div>
@@ -120,7 +120,7 @@
     <div class="start flex bb">
       <div>角度</div>
       <div class="flex1"></div>
-      <div class="flex br bg" style="padding: 0 6px;">
+      <div class="flex br bg">
         <input type="range" name="angle" value="0" min="0" max="360" @input="changeEvent($event, 'angle')" />
       </div>
     </div>
@@ -198,5 +198,8 @@
     width: 26px;
     height: 26px;
     border-radius: 3px;
+  }
+  .text_area .bg {
+    padding: 6px;
   }
 </style>

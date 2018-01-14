@@ -37,8 +37,11 @@ import './lib/canvas-toBlob'
 import { saveAs } from 'file-saver'
 import { fabric } from 'fabric'
 import { filter } from '@api/data'
-const f = fabric.Image.filters
 
+// require('./lib/fabric')
+// console.log(fabricjs)
+
+const f = fabric.Image.filters
 const pad = (str, length) => {
   while (str.length < length) {
     str = '0' + str

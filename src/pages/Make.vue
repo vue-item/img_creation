@@ -8,10 +8,8 @@
         <div class="operating_position">
           <view-text ref="text" :state="state" :text="list.textarea" :change-event="changeText"></view-text>
           <view-image ref="img" :state="state" />
-          <div @click="textStyle($event, 'save')" class="save_btn">
-            <span class="iconfont icon-Save" style="font-size: 20px;"></span>
-            <span style="padding-left: 12px;">保存图片</span>
-          </div>
+          <view-expression ref="icon" />
+          <save />
         </div>
       </div>
     </div>
@@ -27,10 +25,12 @@
   import { image, text, shape } from '@api/data'
   import { createElement } from '@common/util'
   import canvas from '@common/canvas'
+  import ViewExpression from '@components/Expression'
   import ViewText from '@components/Text'
   import ViewImage from '@components/Img'
   import List from '@components/List'
   import ViewMenu from '@components/Menu'
+  import Save from '@components/Save'
   import Url from '@components/Url'
   // http://fabricjs.com/controls // 图片形状移动
 
@@ -58,10 +58,11 @@
       Url,
       ViewMenu,
       ViewText,
-      ViewImage
+      ViewImage,
+      ViewExpression,
+      Save
     },
     mounted () {
-      const self = this
       const f = this.$refs.area
       canvas.set(createElement('canvas', {
         id: 'canvas',
@@ -74,17 +75,17 @@
       canvas.setBgColor('#ffffff')
       canvas.canvas.on({
         'object:selected': (e) => {
-          self.changeState(e.target)
+          this.changeState(e.target)
         },
         'mouse:down': (e) => {
-          self.changeState(e.target)
+          this.changeState(e.target)
         }
       })
     },
     methods: {
       changeState (tar) {
-        if (!tar) return
-        if (tar.type === 'text') {
+        if (!tar || !tar.type) return
+        if (tar.type === 'text' || tar.type === 'textbox') {
           this.list.textarea = tar.text
           this.state = 'text'
         } else if (tar.type === 'image') {
@@ -93,7 +94,6 @@
           this.state = ''
         }
       },
-      save: canvas.save,
       changeText (e, type) {
         const obj = canvas.getActiveObject()
         const params = {}
@@ -223,7 +223,8 @@
   }
   .make .operating_area {
     position: relative;
-    width: 260px;
+    width: calc(100vw / 5);
+    min-width: 260px;
     border-left: 1px solid #DCDCDC;
     background-color: #F5F5F5;
   }
@@ -252,21 +253,6 @@
   }
   .operating_area .bg {
     background-color: #fff;
-  }
-  .operating_area .save_btn {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background-color: #fff;
-    border-top: 1px solid #dcdcdc;
-    cursor: pointer;
   }
   .operating_area .operating_position {
     height: calc(100vh - 50px);
