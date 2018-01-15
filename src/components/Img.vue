@@ -22,6 +22,16 @@
       </div>
     </div>
 
+    <div class="start flex bb">
+      <div>操作</div>
+      <div class="flex1"></div>
+      <div class="flex br bg flex2">
+        <button @click="clear('only')" class="iconfont icon-lajitong f16 flex1"></button>
+        <div class="hr"></div>
+        <button @click="copy" class="iconfont icon-fuzhi f16 flex1"></button>
+      </div>
+    </div>
+
     <div class="start bb">
       <div class="flex flex_start">
         <label class="fillet flex1">
@@ -169,15 +179,6 @@
 
     <div class="start bb">
       <div class="flex flex_start mb">
-        <label><input class="color_input" @input="blur($event, 17)" type="checkbox">模糊</label>
-      </div>
-      <div class="flex flex_start bg br pd mb">
-        <input type="range" @input="blurChange($event, 17, 'blur')" class="range_input" value="0.1" min="0" max="1" step="0.01" ref="blur">
-      </div>
-    </div>
-
-    <div class="start bb">
-      <div class="flex flex_start mb">
         <label><input class="color_input" @input="blend($event, 19)" type="checkbox">混合颜色</label>
         <div class="flex1"></div>
         <select @change="blendChange($event, 19, 'mode')" ref="blend_mode">
@@ -223,6 +224,8 @@
       }
     },
     methods: {
+      copy: canvas.clone.bind(canvas),
+      clear: canvas.clear.bind(canvas),
       gray (e, n) {
         const name = e.target.value
         if (!canvas.filter) {

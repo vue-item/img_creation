@@ -40,7 +40,7 @@ import { filter } from '@api/data'
 
 // require('./lib/fabric')
 // console.log(fabricjs)
-
+const log = console.log
 const f = fabric.Image.filters
 const pad = (str, length) => {
   while (str.length < length) {
@@ -137,7 +137,7 @@ const canvas = {
     const obj = this.canvas.getActiveObject()
     if (obj) {
       obj.set(opt)
-      this.canvas.requestRenderAll()
+      this.canvas.renderAll()
     } else {
       throw 'getActiveObject is null'
     }
@@ -268,6 +268,26 @@ const canvas = {
   getFilter (i) {
     const obj = this.canvas.getActiveObject()
     return obj.filters[i]
+  },
+
+  addImg (url) {
+    fabric.Image.fromURL(url, (oImg) => {
+      this.canvas.add(oImg)
+    })
+  },
+
+  preView () {
+    this.canvas.clone((o) => {
+      const s = 9
+      const obj = o.getObjects()
+
+      if (obj.length) {
+        obj.forEach((v) => {
+
+        })
+      } else {
+      }
+    })
   }
 }
 

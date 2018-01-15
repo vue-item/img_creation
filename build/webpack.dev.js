@@ -15,7 +15,7 @@ const WebpackNotifierPlugin = require('webpack-notifier')
 const utils = require('./utils')
 const resolve = (dir) => path.join(__dirname, '..', dir)
 const isProd = process.env.NODE_ENV === 'production'
-const g = { Vue: 'vue' }
+// const g = { Vue: 'vue', Toast: 'toast' }
 
 const webpackConfig = merge(base, {
   module: {
@@ -26,7 +26,7 @@ const webpackConfig = merge(base, {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     }),
-    new webpack.ProvidePlugin(g),
+    new webpack.ProvidePlugin(conf.provide),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks: Infinity

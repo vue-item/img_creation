@@ -4,6 +4,7 @@ if (!process.env.NODE_ENV) {
 
 const port = process.env.PORT || 6001
 const log = console.log
+const resolve = (dir) => path.join(__dirname, '..', dir)
 const express = require('express')
 const app = express()
 const opn = require('opn')
@@ -23,6 +24,7 @@ const devMiddleware = webpackDevMiddleware(compiler, {
 
 app.set('views', path.resolve(__dirname, '../views'))
 app.engine('html', require('ejs').renderFile)
+app.use('/resources', express.static(resolve('../resources')))
 app.use(devMiddleware)
 app.use((req, res) => {
   res.render('dev.html', {

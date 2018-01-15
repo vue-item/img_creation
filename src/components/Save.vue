@@ -10,7 +10,7 @@
 
   export default {
     methods: {
-      save: canvas.save
+      save: canvas.save.bind(canvas)
     }
   }
 </script>

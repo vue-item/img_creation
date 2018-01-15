@@ -6,18 +6,18 @@
       </div>
       <div class="operating_area">
         <div class="operating_position">
-          <view-text ref="text" :state="state" :text="list.textarea" :change-event="changeText"></view-text>
-          <view-image ref="img" :state="state" />
-          <view-expression ref="icon" />
-          <save />
+          <view-text ref="text" :state="state" :text="list.textarea" :change-event="changeText" />
+          <view-image ref="img" :state="state"/>
+          <view-expression :state="state"/>
+          <save/>
         </div>
       </div>
     </div>
-    <view-menu :dialog-open="dialog" :text="textarea" ref="menu" />
-    <list v-on:toggle="toggle" :list="list.shape" :show="config.shape" />
-    <list v-on:toggle="toggle" :list="list.text" :show="config.text" />
-    <list v-on:toggle="toggle" :list="list.image" :show="config.image" />
-    <url :toggle="dialog" :show="config.url"  />
+    <view-menu :dialog-open="dialog" :text="textarea" ref="menu"/>
+    <list v-on:toggle="toggle" :list="list.shape" :show="config.shape"/>
+    <list v-on:toggle="toggle" :list="list.text" :show="config.text"/>
+    <list v-on:toggle="toggle" :list="list.image" :show="config.image"/>
+    <url :toggle="dialog" :show="config.url"/>
   </div>
 </template>
 
@@ -25,9 +25,9 @@
   import { image, text, shape } from '@api/data'
   import { createElement } from '@common/util'
   import canvas from '@common/canvas'
-  import ViewExpression from '@components/Expression'
   import ViewText from '@components/Text'
   import ViewImage from '@components/Img'
+  import ViewExpression from '@components/Expression'
   import List from '@components/List'
   import ViewMenu from '@components/Menu'
   import Save from '@components/Save'
@@ -63,6 +63,7 @@
       Save
     },
     mounted () {
+      console.log(Toast.top({ text: '哈哈哈' }))
       const f = this.$refs.area
       canvas.set(createElement('canvas', {
         id: 'canvas',
@@ -84,7 +85,11 @@
     },
     methods: {
       changeState (tar) {
-        if (!tar || !tar.type) return
+        console.log(tar)
+        if (!tar || !tar.type) {
+          this.state = ''
+          return
+        }
         if (tar.type === 'text' || tar.type === 'textbox') {
           this.list.textarea = tar.text
           this.state = 'text'
@@ -179,7 +184,11 @@
         canvas.create('Text', '', conf.d)
       },
       dialog (type, state = true) {
-        this.config[type] = state
+        if (type === 'expression') {
+          this.state = 'expression'
+        } else {
+          this.config[type] = state
+        }
       },
       toggle (obj) {
         const f = this.config
@@ -255,8 +264,8 @@
     background-color: #fff;
   }
   .operating_area .operating_position {
-    height: calc(100vh - 50px);
-    padding-bottom: 53px;
+    height: calc(100vh - 90px);
+    margin-bottom: 40px;
     overflow-y: auto;
     box-sizing: border-box;
   }

@@ -1,4 +1,5 @@
 /* reset */
+
 a {
   text-decoration: none;
 }
@@ -32,18 +33,23 @@ body::-webkit-scrollbar {
   width: 0;
 }
 
-input, textarea, button {
+input,
+textarea,
+button {
   padding: 0;
   border: 0;
   outline: none;
 }
 
 input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button{
+input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
   margin: 0;
 }
-input[type="number"]{-moz-appearance:textfield;}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 
 button {
   padding: 0;
@@ -105,9 +111,11 @@ button {
 .br {
   border: 1px solid #DCDCDC;
 }
+
 .c9 {
   color: #999;
 }
+
 .flex {
   display: flex;
   justify-content: center;
@@ -116,15 +124,20 @@ button {
 .flex1 {
   flex: 1;
 }
+
 .flex2 {
   flex: 2;
 }
+
 .flex_items {
   align-items: center;
 }
+
 .flex_start {
-  justify-content: flex-start; flex-wrap: wrap;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
+
 .blue {
   background-image: linear-gradient(-136deg, #A3D7DD 0%, #B0A2DB 100%);
 }
@@ -138,9 +151,59 @@ button {
 }
 
 .yellow {
-  background-image:linear-gradient(-140deg, #FBD533 0%, #A2D85E 100%);
+  background-image: linear-gradient(-140deg, #FBD533 0%, #A2D85E 100%);
 }
 
 .red {
   background-image: linear-gradient(-135deg, #f6a46f 0%, #c27cd0 100%);
+}
+
+.tips_hover {
+  position: relative;
+}
+
+.tips_hover b {
+  pointer-events: none;
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  margin-top: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent;
+  border-right-color: rgba(000, 000, 000, .5);
+  transition: transform .1s;
+  transform-origin: right center;
+  transform: scale(0);
+}
+
+.tips_hover:after {
+  pointer-events: none;
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  margin-left: 16px;
+  margin-top: -18px;
+  padding: 0 8px;
+  height: 36px;
+  line-height: 36px;
+  white-space: nowrap;
+  background: rgba(000, 000, 000, .5);
+  content: attr(data-tips);
+  font-size: 12px;
+  color: #fff;
+  transform: scale(0);
+  transition: transform .1s;
+  transform-origin: left center;
+}
+
+.tips_hover:hover:after {
+  transform: scale(1);
+  z-index: 100;
+}
+
+.tips_hover:hover b {
+  transform: scale(1);
 }

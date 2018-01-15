@@ -1,5 +1,4 @@
 const ip = require('ip').address()
-
 const conf = {
   tpl: {
     title: 'vx-dev',
@@ -14,6 +13,11 @@ const conf = {
     test: `//${ip}:3000/dist/`,
     beta: `//${ip}:3000/dist/`,
     prod: `//${ip}:3000/dist/`,
+  },
+  provide: {
+    Vue: 'vue',
+    Axios: 'axios',
+    Toast: 'toast'
   }
 }
 

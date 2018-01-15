@@ -11,6 +11,7 @@ const conf = {
     vendor: [
       'vue',
       'vue-router',
+      'toast',
       './src/common/iconfont/iconfont.css',
       './src/common/common.css'
     ]
@@ -23,11 +24,11 @@ const conf = {
   },
   resolve: {
     extensions: ['.vue', '.js', '.json'],
-    modules: [
-      resolve('src'),
+    modules: [ // 去哪写目录下寻找第三方模块
       resolve('node_modules')
     ],
     alias: {
+      'toast': resolve('src/common/toast'),
       'vue': 'vue/dist/vue.runtime.min.js',
       'vue-router': 'vue-router/dist/vue-router.min.js',
       '@common': resolve('src/common'),
@@ -43,8 +44,8 @@ const conf = {
     rules: [
       {
         test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
         enforce: 'pre',
+        loader: 'eslint-loader',
         include: [
           resolve('src')
         ],
@@ -65,7 +66,6 @@ const conf = {
       },
       {
         test: /\.js$/,
-        // loader: ['babel-loader?cacheDirectory=true'],
         loader: 'babel-loader',
         exclude: /node_modules/,
         include: [

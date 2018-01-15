@@ -9,9 +9,11 @@ const ManifestPlugin = require('./utils/manifest')
 const ZipWebpackPlugin = require('zip-webpack-plugin')
 const OptimizeJsPlugin = require('optimize-js-plugin')
 const UglifyJsParallelPlugin = require('webpack-uglify-parallel')
+const CompressionPlugin = require("compression-webpack-plugin")
 const webpackConfig = require('./webpack.base')
 const pkg = require('../package.json')
 const utils = require('./utils')
+const conf = require('./utils/config')
 
 const conf = merge(webpackConfig, {
   module: {
@@ -19,7 +21,7 @@ const conf = merge(webpackConfig, {
   },
   plugins: [
     new ProgressBarPlugin(),
-    new webpack.ProvidePlugin({ Vue: 'vue' }),
+    new webpack.ProvidePlugin(conf.provide),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production')
@@ -36,6 +38,7 @@ const conf = merge(webpackConfig, {
       },
       sourceMap: false
     }),
+
     // new UglifyJsParallelPlugin({
     //   workers: os.cpus().length
     // }),
@@ -45,6 +48,14 @@ const conf = merge(webpackConfig, {
     }),
     new ExtractTextPlugin({
       filename: '[name].css'
+    }),
+    // CompressionPlugin
+    new CompressionPlugin({
+      asset: "[path].gz[query]",
+      algorithm: "gzip",
+      test: /.(js|html)$/,
+      threshold: 10240,
+      minRatio: 0.8
     }),
     new HtmlwebpackPlugin({
       dev: '"production"',

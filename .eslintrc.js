@@ -16,6 +16,7 @@ module.exports = {
         'html'
     ],
     globals: {
+        'Toast': true,
         'Vue': true,
         'log': true
     },

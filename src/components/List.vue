@@ -1,5 +1,5 @@
 <template>
-  <div class="shape" style="left: 100vw;" :class="{'shape_active': show}" @click="target($event)">
+  <div class="shape" style="left: 100%;" :class="{'shape_active': show}" @click="target($event)">
     <div class="shape_flex">
       <div style="flex: 1;"></div>
       <div class="shape_box">
