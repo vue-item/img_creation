@@ -1,5 +1,5 @@
 <template>
-  <div class="shape" style="left: 100%;" :class="{'shape_active': show}" @click="target($event)">
+  <div class="shape" style="opacity: 0" :class="{'shape_active': show}" @click="target($event)">
     <div class="shape_flex">
       <div style="flex: 1;"></div>
       <div class="shape_box">
@@ -30,8 +30,8 @@
     },
     mounted () {
       setTimeout(() => {
-        this.$el.style.left = ''
-      }, 400)
+        this.$el.style.opacity = ''
+      }, 1000)
     },
     methods: {
       target (e, obj = {}) {

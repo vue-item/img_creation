@@ -7,7 +7,7 @@
       <div class="expression_item">
         <div class="expression_item_height" :class="{ 'expression_item_active': itemActive === v }" v-for="v in item" @click="itemTag(v)">{{ v }}</div>
       </div>
-      <div class="expression_img flex1">
+      <div class="expression_img flex1" id="expression_img">
         <div v-for="v in img" class="fleximg">
           <img @click="addImg(v)" :src="v">
         </div>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+  //  http://jsfiddle.net/softvar/Rvxq5/
   import { menu, item } from '@api/resource'
   import canvas from '@common/canvas'
 
@@ -36,6 +37,9 @@
     created () {
       const _menu = this.$route.query.menu
       this.menuTab(_menu || this.menu[0])
+    },
+    mounted () {
+      canvas.dragEvent()
     },
     methods: {
       menuTab (v) {
@@ -65,7 +69,7 @@
         this.img = img
       },
       addImg (v) {
-        canvas.addImg(v)
+        canvas.clickAddImg(v)
       }
     }
   }
@@ -102,16 +106,27 @@
     background-color: #fff;
   }
   .expression_img {
-    display: flex;
     flex-wrap: wrap;
-    /*justify-content: flex-start;*/
-    /*align-items: flex-start;*/
+    background-color: #fff;
+    box-sizing: border-box;
   }
   .expression_img .fleximg {
+    display: inline-block;
     width: 50%;
-    background-color: #ddd;
+    padding: 4%;
+    box-sizing: border-box;
   }
   .expression_img img {
+    cursor: pointer;
     width: 100%;
+    transition: all .3s;
+  }
+  .expression_img img:hover {
+    opacity: .6;
+  }
+  .cloneImg {
+    opacity: .5;
+    position: absolute;
+    box-shadow: 1px 1px 5px #ddd;
   }
 </style>

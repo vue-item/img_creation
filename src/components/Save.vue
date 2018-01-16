@@ -28,7 +28,8 @@
     line-height: 40px;
     text-align: center;
     background-color: #fff;
-    /*border-top: 1px solid #dcdcdc;*/
+    border-top: 1px solid #dcdcdc;
     cursor: pointer;
+    box-sizing: border-box;
   }
 </style>

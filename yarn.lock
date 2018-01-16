@@ -2349,6 +2349,10 @@ etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
 
+ev-emitter@^1.0.1, ev-emitter@^1.0.3:
+  version "1.1.1"
+  resolved "http://registry.npm.taobao.org/ev-emitter/download/ev-emitter-1.1.1.tgz#8f18b0ce5c76a5d18017f71c0a795c65b9138f2a"
+
 event-emitter@~0.3.5:
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/event-emitter/-/event-emitter-0.3.5.tgz#df8c69eef1647923c7157b9ce83840610b02cc39"
@@ -3094,6 +3098,13 @@ http-signature@~1.2.0:
 https-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
+
+huebee@^2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/huebee/download/huebee-2.0.0.tgz#c8af127c02adcd26162a69b81e27df71d189f394"
+  dependencies:
+    ev-emitter "^1.0.3"
+    unipointer "^2.1.0"
 
 humanize@0.0.9:
   version "0.0.9"
@@ -5946,6 +5957,12 @@ uid-number@^0.0.6:
 undefsafe@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/undefsafe/-/undefsafe-0.0.3.tgz#ecca3a03e56b9af17385baac812ac83b994a962f"
+
+unipointer@^2.1.0:
+  version "2.2.1"
+  resolved "http://registry.npm.taobao.org/unipointer/download/unipointer-2.2.1.tgz#05f9adaac92c0e6e6ed41ce85adab26166b03ee6"
+  dependencies:
+    ev-emitter "^1.0.1"
 
 uniq@^1.0.1:
   version "1.0.1"

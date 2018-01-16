@@ -130,24 +130,14 @@ Toast.bottom = function (obj) {
   this.render()
 }
 
-// module.exports = Toast
-
-// export default {
-//   top (obj) {
-//     Toast.top(obj)
-//   },
-//   middle (obj) {
-//     Toast.middle(obj)
-//   },
-//   bottom () {
-//     Toast.bottom(obj)
-//   }
-// }
-
 export const top = (obj) => {
   Toast.top(obj)
 }
 
+export const middle = () => {
+  Toast.middle(obj)
+}
 
-
-
+export const bottom = () => {
+  Toast.bottom(obj)
+}

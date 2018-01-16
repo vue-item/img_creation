@@ -28,6 +28,10 @@ const base = {
   // left: 100,
   // top: 100
 }
+let image_drag_offset_x = 0
+let image_drag_offset_y = 0
+let canvas_pan_x = 0
+let canvas_pan_y = 0
 
 // fabric.util.getRandomInt(0, 600)
 // const obj = ['Text', 'IText', 'Textbox', 'Image']
@@ -58,7 +62,7 @@ const getRandomColor = () => {
   );
 }
 
-const canvas = {
+const conf = {
   filter: '',
   mr: 6,
   tmp: [],
@@ -192,6 +196,7 @@ const canvas = {
   },
 
   save () {
+    this.blur()
     const _ = document.querySelector('#canvas')
     _.toBlob((blob) => {
       const fr = new FileReader()
@@ -270,12 +275,17 @@ const canvas = {
     return obj.filters[i]
   },
 
-  addImg (url) {
+  isCanvasSupported () {
+    const t = document.createElement("canvas")
+    return !(!t.getContext || !t.getContext("2d"))
+  },
+
+  clickAddImg (url) {
     fabric.Image.fromURL(url, (oImg) => {
       this.canvas.add(oImg)
     })
   },
-
+  // 测试方法
   preView () {
     this.canvas.clone((o) => {
       const s = 9
@@ -288,8 +298,71 @@ const canvas = {
       } else {
       }
     })
+  },
+
+  dragEvent () {
+    // canvas.bringToFront(triangle)
+    const self = this
+    const el = document.querySelector('#expression_img')
+    const make = document.querySelector('#_draw')
+    let img = ''
+    el.addEventListener('dragstart', (e) => {
+      const tar = e.target
+      log(tar.src)
+      if (tar.tagName.toLowerCase() === 'img') {
+        const _img = el.querySelector('.activeImg')
+        if (_img) _img.classList.remove('activeImg')
+        tar.classList.add('activeImg')
+      }
+    })
+    el.addEventListener('dragend', (e) => {})
+    make.addEventListener('dragenter', (e) => {})
+    make.addEventListener('dragover', (e) => {
+      e.preventDefault()
+    })
+    make.addEventListener('drop', (e) => {
+      e.preventDefault()
+      const src = document.querySelector('#expression_img .activeImg').src
+      const img = new Image
+      img.src = src
+      img.onload = () => {
+        const _img = new fabric.Image(img)
+        _img.scale(200 / img.width).set({
+            angle: 0
+        })
+        this.canvas.add(_img)
+        _img.setCoords()
+      }
+    })
   }
 }
 
-export default canvas
+document.addEventListener('keydown', (e) => {
+  const code = e.keyCode
+  if (code === 8) {
+    conf.canvas.clear('only')
+  } else if (code === 27) {
+    conf.canvas.blur()
+  }
+})
 
+window.addEventListener('resize', (e) => {
+  const area = document.querySelector('#_area')
+  const w = area.offsetWidth
+  const h = area.offsetHeight
+  conf.canvas.setWidth(w)
+  conf.canvas.setHeight(h)
+})
+
+export default conf
+
+// const t = new fabric.Image(a)
+// t.scale(200 / a.width).set({
+//     angle: 0,
+//     padding: 10,
+//     cornersize: 10,
+//     left: n + (s - 200) / 2,
+//     top: r + (o - a.height * (200 / a.width)) / 2
+// })
+// canvas.add(t)
+// canvas.renderAll()

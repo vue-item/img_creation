@@ -141,5 +141,3 @@ export const computedHeight = (imgW, imgH, w) => {
   }
   return obj
 }
-
-// 键盘事件

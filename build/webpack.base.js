@@ -12,6 +12,7 @@ const conf = {
       'vue',
       'vue-router',
       'toast',
+      'huebee/dist/huebee.css',
       './src/common/iconfont/iconfont.css',
       './src/common/common.css'
     ]

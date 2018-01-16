@@ -2,7 +2,6 @@ import App from './pages/App'
 import router from './router'
 
 new Vue({
-  // store,
   router,
   el: '#root',
   render: h => h(App),

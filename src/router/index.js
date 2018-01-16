@@ -8,7 +8,7 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/make',
+      path: '/',
       name: 'make',
       component: Make
     }

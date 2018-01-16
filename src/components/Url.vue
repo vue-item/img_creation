@@ -1,5 +1,5 @@
 <template>
-  <div class="url" style="top: 100vh" :class="{ 'url_active': show }">
+  <div class="url" style="opacity: 0" :class="{ 'url_active': show }">
     <div class="url_bg">
       <sup style="color: #666;">每次只能上传一张图片，上传的图片不超过10MB</sup>
       <div>
@@ -26,7 +26,7 @@
     },
     mounted () {
       setTimeout(() => {
-        this.$el.style.top = ''
+        this.$el.style.opacity = ''
       }, 400)
     },
     methods: {

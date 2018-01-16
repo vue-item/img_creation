@@ -1,23 +1,23 @@
 <template>
   <div class="make">
     <div class="make_container flex">
-      <div ref="area" class="draw_area">
-        <div ref="draw" class="draw"></div>
+      <div ref="area" id="_area" class="draw_area">
+        <div ref="draw" id="_draw" class="draw"></div>
       </div>
       <div class="operating_area">
         <div class="operating_position">
           <view-text ref="text" :state="state" :text="list.textarea" :change-event="changeText" />
           <view-image ref="img" :state="state"/>
           <view-expression :state="state"/>
-          <save/>
+          <save-btn />
         </div>
       </div>
     </div>
     <view-menu :dialog-open="dialog" :text="textarea" ref="menu"/>
-    <list v-on:toggle="toggle" :list="list.shape" :show="config.shape"/>
-    <list v-on:toggle="toggle" :list="list.text" :show="config.text"/>
-    <list v-on:toggle="toggle" :list="list.image" :show="config.image"/>
-    <url :toggle="dialog" :show="config.url"/>
+    <view-list v-on:toggle="toggle" :list="list.shape" :show="config.shape"/>
+    <view-list v-on:toggle="toggle" :list="list.text" :show="config.text"/>
+    <view-list v-on:toggle="toggle" :list="list.image" :show="config.image"/>
+    <view-url :toggle="dialog" :show="config.url"/>
   </div>
 </template>
 
@@ -25,13 +25,13 @@
   import { image, text, shape } from '@api/data'
   import { createElement } from '@common/util'
   import canvas from '@common/canvas'
+  import ViewUrl from '@components/Url'
   import ViewText from '@components/Text'
   import ViewImage from '@components/Img'
   import ViewExpression from '@components/Expression'
-  import List from '@components/List'
+  import ViewList from '@components/List'
   import ViewMenu from '@components/Menu'
-  import Save from '@components/Save'
-  import Url from '@components/Url'
+  import SaveBtn from '@components/Save'
   // http://fabricjs.com/controls // 图片形状移动
 
   export default {
@@ -50,25 +50,24 @@
           image,
           textarea: ''
         },
-        state: ''
+        state: 'expression'
       }
     },
     components: {
-      List,
-      Url,
+      ViewUrl,
+      ViewList,
       ViewMenu,
       ViewText,
       ViewImage,
       ViewExpression,
-      Save
+      SaveBtn
     },
     mounted () {
-      console.log(Toast.top({ text: '哈哈哈' }))
       const f = this.$refs.area
       canvas.set(createElement('canvas', {
         id: 'canvas',
-        width: f.offsetWidth / 2,
-        height: f.offsetHeight / 2,
+        width: f.offsetWidth,
+        height: f.offsetHeight,
         father: this.$refs.draw
       }), {
         preserveObjectStacking: true
@@ -85,7 +84,6 @@
     },
     methods: {
       changeState (tar) {
-        console.log(tar)
         if (!tar || !tar.type) {
           this.state = ''
           return
@@ -256,6 +254,8 @@
   .operating_area .flex {
     border-radius: 3px;
     align-items: center;
+    border-top: 1px solid #ddd;
+    box-sizing: border-box;
   }
   .operating_area .mb {
     margin-bottom: 6px;
