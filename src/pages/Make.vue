@@ -9,7 +9,7 @@
           <view-text ref="text" :state="state" :text="list.textarea" :change-event="changeText" />
           <view-image ref="img" :state="state"/>
           <view-expression :state="state"/>
-          <save-btn />
+          <view-brush ref="brush" :state="state" />
         </div>
       </div>
     </div>
@@ -31,8 +31,10 @@
   import ViewExpression from '@components/Expression'
   import ViewList from '@components/List'
   import ViewMenu from '@components/Menu'
-  import SaveBtn from '@components/Save'
+  import ViewBrush from '@components/Brush'
   // http://fabricjs.com/controls // 图片形状移动
+  // 打图 https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/toDataURL
+  fabric.Object.prototype.transparentCorners = false
 
   export default {
     name: 'make',
@@ -50,7 +52,7 @@
           image,
           textarea: ''
         },
-        state: 'expression'
+        state: 'brush'
       }
     },
     components: {
@@ -59,8 +61,8 @@
       ViewMenu,
       ViewText,
       ViewImage,
-      ViewExpression,
-      SaveBtn
+      ViewBrush,
+      ViewExpression
     },
     mounted () {
       const f = this.$refs.area
@@ -70,6 +72,7 @@
         height: f.offsetHeight,
         father: this.$refs.draw
       }), {
+        isDrawingMode: false,
         preserveObjectStacking: true
       })
       canvas.setBgColor('#ffffff')
@@ -81,6 +84,7 @@
           this.changeState(e.target)
         }
       })
+      canvas.brushInit()
     },
     methods: {
       changeState (tar) {
@@ -94,7 +98,9 @@
         } else if (tar.type === 'image') {
           this.state = 'img'
         } else {
-          this.state = ''
+          if (canvas.isDrawingMode !== true) {
+            this.state = ''
+          }
         }
       },
       changeText (e, type) {
@@ -184,6 +190,8 @@
       dialog (type, state = true) {
         if (type === 'expression') {
           this.state = 'expression'
+        } else if (type === 'brush') {
+          this.state = 'brush'
         } else {
           this.config[type] = state
         }
@@ -254,7 +262,6 @@
   .operating_area .flex {
     border-radius: 3px;
     align-items: center;
-    border-top: 1px solid #ddd;
     box-sizing: border-box;
   }
   .operating_area .mb {
@@ -264,9 +271,9 @@
     background-color: #fff;
   }
   .operating_area .operating_position {
-    height: calc(100vh - 90px);
-    margin-bottom: 40px;
-    overflow-y: auto;
+    /*height: calc(100vh - 90px);*/
+    /*margin-bottom: 40px;*/
+    /*overflow-y: auto;*/
     box-sizing: border-box;
   }
   .operating_area .operating_position::-webkit-scrollbar { width: 0; }
@@ -276,6 +283,24 @@
     top: 50%;
     transform: translate(-50%, -50%);
     border: 1px solid #DCDCDC;
+  }
+  /* 下拉组件 */
+  .flist {
+    position: relative;
+  }
+  .flist .flist_icon {
+    position: absolute;
+    right: -3px;
+    top: 50%;
+    margin-top: -6px;
+    color: #999;
+    pointer-events: none;
+  }
+  .flist .select {
+    outline: none;
+    padding: 0 25px;
+    -webkit-appearance: none;
+    border: none;
   }
 </style>
 

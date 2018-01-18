@@ -92,7 +92,7 @@
   .expression_item, .expression_img {
     overflow-y: auto;
     width: 80px;
-    height: calc(100vh - 130px);
+    height: calc(100vh - 90px);
   }
   .expression_item::-webkit-scrollbar { width: 0; }
   .expression_img::-webkit-scrollbar { width: 0; }

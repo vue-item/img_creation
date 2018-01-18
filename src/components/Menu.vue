@@ -1,5 +1,9 @@
 <template>
   <div class="menu">
+    <div v-on:click="target('brush')" data-tips="画笔工具" class="box tips_hover" style="font-weight: 900;">
+      <i class="iconfont icon-bijiben"></i>
+      <b></b>
+    </div>
     <div v-on:click="target('shape')" data-tips="添加图形" class="box tips_hover" style="font-weight: 900;">
       <i class="iconfont icon-graph-copy"></i>
       <b></b>
@@ -21,6 +25,10 @@
       <button class="color color-input"></button>
       <div @click="openColor" data-tips="调整背景色" style="border: 0;" class="pm tips_hover"><b></b></div>
     </div>
+    <div v-on:click="target('save')" data-tips="生成图片" class="box tips_hover">
+      <i class="iconfont icon-Save"></i>
+      <b></b>
+    </div>
     <div v-on:click="target('clear')" data-tips="清除画布" class="box tips_hover">
       <i class="iconfont icon-lajitong1"></i>
       <b></b>
@@ -34,7 +42,7 @@
   import loading from '@common/loading'
   import canvas from '@common/canvas'
   const Huebee = require('huebee')
-  let tmp = ''
+  let huebee = ''
 
   export default {
     props: {
@@ -42,25 +50,26 @@
     },
     mounted () {
       // accept="image/gif"
-      tmp = new Huebee('.color-input', {
+      huebee = new Huebee('.color-input', {
         saturations: 2,
         setText: false,
         setBGColor: true,
-        customColors: ['#19F', '#E5A628', 'darkgray', 'hsl(210, 90%, 55%)'],
-        className: 'color-input-picker'
+        customColors: ['#19F', '#E5A628', 'darkgray', 'hsl(210, 90%, 55%)']
       })
-      tmp.on('change', (val) => {
+      huebee.on('change', (val) => {
         canvas.setBgColor(val)
       })
     },
     methods: {
       openColor () {
-        tmp.open()
+        huebee.open()
       },
       target (name) {
         canvas.blur()
         if (name === 'clear') {
           canvas.clear('all')
+        } else if (name === 'save') {
+          canvas.save()
         } else {
           this.dialogOpen(name)
         }

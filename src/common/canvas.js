@@ -28,10 +28,6 @@ const base = {
   // left: 100,
   // top: 100
 }
-let image_drag_offset_x = 0
-let image_drag_offset_y = 0
-let canvas_pan_x = 0
-let canvas_pan_y = 0
 
 // fabric.util.getRandomInt(0, 600)
 // const obj = ['Text', 'IText', 'Textbox', 'Image']
@@ -41,9 +37,8 @@ import './lib/canvas-toBlob'
 import { saveAs } from 'file-saver'
 import { fabric } from 'fabric'
 import { filter } from '@api/data'
+import { getOffset } from './util'
 
-// require('./lib/fabric')
-// console.log(fabricjs)
 const log = console.log
 const f = fabric.Image.filters
 const pad = (str, length) => {
@@ -170,6 +165,80 @@ const conf = {
     }
   },
 
+  /* -- 画笔相关 -- */
+  brush (opt) {
+    switch (opt.mode) {
+      case 'hline':
+        // canvas.freeDrawingBrush =
+        break
+      case 'vline':
+        // canvas.freeDrawingBrush =
+        break
+      case 'square':
+        // canvas.freeDrawingBrush =
+        break
+      case 'diamond':
+        // canvas.freeDrawingBrush =
+        break
+      case 'texture':
+        // canvas.freeDrawingBrush =
+        break
+      default:
+        this.canvas.freeDrawingBrush = new fabric[val + 'Brush'](this.canvas)
+    }
+
+    if (this.canvas.freeDrawingBrush) {
+      this.canvas.freeDrawingBrush.color = opt.lineColor
+      this.canvas.freeDrawingBrush.width = parseInt(opt.lineWidth, 10) || 1
+      this.canvas.freeDrawingBrush.shadow = new fabric.Shadow({
+        blur: parseInt(opt.shadowWidth, 10) || 0,
+        offsetX: 0,
+        offsetY: 0,
+        affectStroke: true,
+        color: opt.shadowColor,
+      })
+    }
+  },
+  brushColor (v, t) {
+    if (t === 'brush') {
+      this.canvas.freeDrawingBrush.color = v
+    } else if (t === 'shadow') {
+      this.canvas.freeDrawingBrush.shadow.color = v
+    }
+  },
+  brushLineWidth (v) {
+    log(v)
+    this.canvas.freeDrawingBrush.width = parseInt(v, 10) || 1
+  },
+  brushShadowWidth (v) {
+    this.canvas.freeDrawingBrush.shadow.blur = parseInt(v, 10) || 0
+  },
+  brushshadowOffset (v) {
+    this.canvas.freeDrawingBrush.shadow.offsetX = parseInt(v, 10) || 0
+    this.canvas.freeDrawingBrush.shadow.offsetY = parseInt(v, 10) || 0
+  },
+  brushInit (opt = {}) {
+    this.brushCanvas(true)
+    if (!opt) {
+      opt.lineColor = '#666'
+      opt.lineWidth = 30
+      opt.shadowWidth = 0
+      opt.shadowColor = '#666'
+    }
+    this.canvas.freeDrawingBrush.color = opt.lineColor
+    this.canvas.freeDrawingBrush.width = parseInt(opt.lineWidth, 10) || 1;
+    this.canvas.freeDrawingBrush.shadow = new fabric.Shadow({
+      blur: parseInt(opt.shadowWidth, 10) || 0,
+      offsetX: 0,
+      offsetY: 0,
+      affectStroke: true,
+      color: opt.shadowColor
+    })
+  },
+  brushCanvas (state) {
+    this.canvas.isDrawingMode = state
+  },
+
   clear (type) {
     const obj = this.canvas.getActiveObjects()
     if (!obj) return
@@ -178,7 +247,8 @@ const conf = {
         this.canvas.remove.apply(this.canvas, this.canvas.getActiveObjects())
         break
       case 'all':
-        this.canvas.remove.apply(this.canvas, this.canvas.getObjects())
+        this.canvas.clear()
+        // this.canvas.remove.apply(this.canvas, this.canvas.getObjects())
         break
     }
     this.canvas.discardActiveObject()
@@ -281,34 +351,45 @@ const conf = {
   },
 
   clickAddImg (url) {
-    fabric.Image.fromURL(url, (oImg) => {
-      this.canvas.add(oImg)
+    const w = this.canvas.width / 2
+    const h = this.canvas.height / 2
+    fabric.Image.fromURL(url, (img) => {
+      const _w = img.width
+      const _h = img.height
+      img.scale(200 / _w).set({
+        left: w - _w / 2,
+        top: h - _h / 2
+      })
+      this.canvas.add(img)
     })
   },
+
   // 测试方法
   preView () {
     this.canvas.clone((o) => {
       const s = 9
       const obj = o.getObjects()
-
       if (obj.length) {
         obj.forEach((v) => {
 
         })
       } else {
+
       }
     })
   },
 
   dragEvent () {
     // canvas.bringToFront(triangle)
-    const self = this
+    // const self = this
     const el = document.querySelector('#expression_img')
     const make = document.querySelector('#_draw')
-    let img = ''
+    let disX = ''
+    let disY = ''
     el.addEventListener('dragstart', (e) => {
       const tar = e.target
-      log(tar.src)
+      disX = e.clientX - getOffset(tar, 'offsetLeft')
+      disY = e.clientY - getOffset(tar, 'offsetTop')
       if (tar.tagName.toLowerCase() === 'img') {
         const _img = el.querySelector('.activeImg')
         if (_img) _img.classList.remove('activeImg')
@@ -321,6 +402,7 @@ const conf = {
       e.preventDefault()
     })
     make.addEventListener('drop', (e) => {
+
       e.preventDefault()
       const src = document.querySelector('#expression_img .activeImg').src
       const img = new Image
@@ -328,21 +410,43 @@ const conf = {
       img.onload = () => {
         const _img = new fabric.Image(img)
         _img.scale(200 / img.width).set({
-            angle: 0
+          left: e.offsetX - disX,
+          top: e.offsetY - disY
         })
         this.canvas.add(_img)
         _img.setCoords()
       }
     })
+  },
+
+  getVLine () {
+    const vLinePatternBrush = new fabric.PatternBrush(canvas)
+    vLinePatternBrush.getPatternSrc = () => {
+      const patternCanvas = fabric.document.createElement('canvas')
+      patternCanvas.width = patternCanvas.height = 10
+      const ctx = patternCanvas.getContext('2d')
+      ctx.strokeStyle = this.color
+      ctx.lineWidth = 5
+      ctx.beginPath()
+      ctx.moveTo(0, 5)
+      ctx.lineTo(10, 5)
+      ctx.closePath()
+      ctx.stroke()
+      return patternCanvas
+    }
   }
 }
 
 document.addEventListener('keydown', (e) => {
+  const el = document.activeElement
+  const name = el.tagName.toLowerCase()
   const code = e.keyCode
+  if (name === 'textarea' || name === 'input') return
   if (code === 8) {
-    conf.canvas.clear('only')
+    conf.clear('only')
   } else if (code === 27) {
-    conf.canvas.blur()
+    conf.blur()
+    el.blur()
   }
 })
 

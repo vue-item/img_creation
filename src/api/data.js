@@ -23,6 +23,18 @@ export const shape = [{
   class: 'iconfont icon-zhixianxianduan'
 }]
 
+export const brushList = [
+  'Pencil',
+  'Circle',
+  'Spray',
+  'Pattern',
+  'hline',
+  'vline',
+  'square',
+  'diamond',
+  'texture'
+]
+
 export const filter = [
   'Grayscale',
   'Invert',
@@ -269,3 +281,10 @@ export const font = {
     name: '思源繁体'
   }]
 }
+
+export const colorConfig = {
+  saturations: 2,
+  setText: false,
+  setBGColor: true
+}
+

@@ -1,10 +1,10 @@
 <template>
-  <div class="fontList">
+  <div class="flist">
     <div>
       <select class="select" @change="changeFont">
         <option v-for="v in list" :value="v.family">{{ v.name }}</option>
       </select>
-      <i class="iconfont icon-jiantou fontList_icon f10"></i>
+      <i class="iconfont icon-jiantou flist_icon f10"></i>
     </div>
   </div>
 </template>
@@ -36,11 +36,10 @@
 </script>
 
 <style>
-  .fontList {
+  .flist {
     position: relative;
-
   }
-  .fontList_icon {
+  .flist_icon {
     position: absolute;
     right: -3px;
     top: 50%;

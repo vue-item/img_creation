@@ -129,6 +129,15 @@ function mobileCheck() {
     t
 }
 */
+export const getOffset = (el, type) => {
+  let off = el[type]
+  let par = el.offsetParent
+  while (par) {
+    off += par[type]
+    par = par.offsetParent
+  }
+  return off
+}
 
 export const computedHeight = (imgW, imgH, w) => {
   const obj = {}

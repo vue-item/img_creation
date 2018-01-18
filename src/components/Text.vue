@@ -25,7 +25,14 @@
       <div>字体</div>
       <div class="flex1"></div>
       <div class="flex br bg">
-        <view-font></view-font>
+        <div class="flist">
+          <div>
+            <select class="select" @change="changeFont">
+              <option v-for="v in list" :value="v.family">{{ v.name }}</option>
+            </select>
+            <i class="iconfont icon-jiantou flist_icon f10"></i>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -146,8 +153,9 @@
 </template>
 
 <script>
-  import ViewFont from '@components/Font'
   import canvas from '@common/canvas'
+  import { checkPlatform } from '@common/util'
+  import { font } from '@api/data'
 
   export default {
     props: {
@@ -155,12 +163,21 @@
       text: String,
       state: String
     },
-    components: {
-      ViewFont
+    data () {
+      return {
+        list: []
+      }
+    },
+    created () {
+      const os = checkPlatform()
+      this.list = font[os]
     },
     methods: {
       copy: canvas.clone.bind(canvas),
-      clear: canvas.clear.bind(canvas)
+      clear: canvas.clear.bind(canvas),
+      changeFont (e) {
+        canvas.style({ fontFamily: e.target.value })
+      }
     }
   }
 </script>
