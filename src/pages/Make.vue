@@ -9,7 +9,8 @@
           <view-text ref="text" :state="state" :text="list.textarea" :change-event="changeText" />
           <view-image ref="img" :state="state"/>
           <view-expression :state="state"/>
-          <view-brush ref="brush" :state="state" />
+          <view-brush :state="state" />
+          <view-shape ref="shape" :state="state" :modify="shapeModifyState" />
         </div>
       </div>
     </div>
@@ -32,9 +33,10 @@
   import ViewList from '@components/List'
   import ViewMenu from '@components/Menu'
   import ViewBrush from '@components/Brush'
+  import ViewShape from '@components/Shape'
   // http://fabricjs.com/controls // 图片形状移动
   // 打图 https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/toDataURL
-  fabric.Object.prototype.transparentCorners = false
+  // fabric.Object.prototype.transparentCorners = false
 
   export default {
     name: 'make',
@@ -52,7 +54,7 @@
           image,
           textarea: ''
         },
-        state: 'brush'
+        state: 'expression' // expression
       }
     },
     components: {
@@ -62,6 +64,7 @@
       ViewText,
       ViewImage,
       ViewBrush,
+      ViewShape,
       ViewExpression
     },
     mounted () {
@@ -82,25 +85,51 @@
         },
         'mouse:down': (e) => {
           this.changeState(e.target)
+        },
+        'mouse:move': (e) => {
+          if (this.state === 'shape') { // 替代 watch
+            this.$refs.shape.init()
+          }
         }
       })
-      canvas.brushInit()
     },
     methods: {
+      shapeModifyState () {
+        this.state = ''
+      },
+      dialog (type, state = true) {
+        if (type !== 'brush') canvas.brushCanvas(false)
+        if (type === 'expression') {
+          this.state = 'expression'
+        } else if (type === 'brush') {
+          this.state = 'brush'
+          canvas.brushCanvas(true)
+          // console.log(canvas.freeDrawingBrush)
+          // if (canvas.freeDrawingBrush) {
+          canvas.brushInit()
+          // }
+        } else {
+          this.config[type] = state
+        }
+      },
+      // to do
       changeState (tar) {
+        if (this.state === 'brush') return // 锁定画笔状态
         if (!tar || !tar.type) {
           this.state = ''
           return
         }
-        if (tar.type === 'text' || tar.type === 'textbox') {
+        const type = tar.type
+        if (type === 'text' || type === 'textbox') {
           this.list.textarea = tar.text
           this.state = 'text'
-        } else if (tar.type === 'image') {
+        } else if (type === 'image') {
           this.state = 'img'
+        } else if (type === 'rect' || type === 'circle' || type === 'triangle' || type === 'line' || type === 'path') {
+          this.state = 'shape'
+          this.$refs.shape.init()
         } else {
-          if (canvas.isDrawingMode !== true) {
-            this.state = ''
-          }
+          this.state = ''
         }
       },
       changeText (e, type) {
@@ -187,29 +216,24 @@
         }
         canvas.create('Text', '', conf.d)
       },
-      dialog (type, state = true) {
-        if (type === 'expression') {
-          this.state = 'expression'
-        } else if (type === 'brush') {
-          this.state = 'brush'
-        } else {
-          this.config[type] = state
-        }
-      },
       toggle (obj) {
         const f = this.config
         if (obj.type === 'Rect' || obj.type === 'Circle' || obj.type === 'Triangle' || obj.type === 'Line') {
+          this.state = '' // 解锁画笔状态
           f.shape = false
-          if (obj.type) canvas.create(obj.type, { active: true })
+          if (obj.type) canvas.create(obj.type, '', { active: true })
         } else if (obj.type === 'Text' || obj.type === 'IText' || obj.type === 'Textbox') {
           f.text = false
+          this.state = '' // 解锁画笔状态
           canvas.create(obj.type, '请输入你的文字', { active: true })
         } else if (obj.type === 'file') {
+          this.state = '' // 解锁画笔状态
           setTimeout(() => {
             this.$refs.menu.$refs.file.click()
             f.image = false
           }, 200)
         } else if (obj.type === 'url') {
+          this.state = '' // 解锁画笔状态
           f.image = f.url = false
           f.url = true
         } else {

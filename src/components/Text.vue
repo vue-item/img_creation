@@ -3,19 +3,22 @@
     <textarea v-model="text" @input="changeEvent($event, 'text')" ref="textarea" class="text bb f16" placeholder="文本编辑区" maxlength="250" rows="1" tabindex="0"></textarea>
 
     <div class="start flex bb">
-      <div>颜色</div>
       <div class="flex1"></div>
 
-      <div class="flex flex_pd">
-        <div class="flex color_box br" style="margin-right: 6px;">
+      <div class="flex flex_pd" ref="colorPar">
+        <div id="fontColor" class="flex color_box br" style="margin-right: 12px;">
           <span class="c9 f10">字体</span>
-          <input class="color_input" @input="changeEvent($event, 'fill')" type="color" name="color">
+          <div ref="font" class="text_color"></div>
+          <input @input="changeEvent($event, 'fill')" class="color_input input-font" type="text" name="color">
+          <div @click="open($event, 'font')" class="text_event"></div>
           <i class="iconfont icon-jiantou f8"></i>
         </div>
 
-        <div class="flex color_box br">
+        <div id="bgColor" class="flex color_box br">
           <span class="c9 f10">背景</span>
-          <input class="color_input" @input="changeEvent($event, 'textBackgroundColor')" type="color" name="color">
+          <div ref="bg"  class="text_color"></div>
+          <input @input="changeEvent($event, 'textBackgroundColor')" class="color_input input-bg" type="color" name="color">
+          <div @click="open($event, 'bg')" class="text_event"></div>
           <i class="iconfont icon-jiantou f8"></i>
         </div>
       </div>
@@ -153,9 +156,13 @@
 </template>
 
 <script>
+  import { colorConfig } from '@api/data'
   import canvas from '@common/canvas'
   import { checkPlatform } from '@common/util'
   import { font } from '@api/data'
+  const Huebee = require('huebee')
+  let _huebee = ''
+  let _huebeeBg = ''
 
   export default {
     props: {
@@ -172,11 +179,36 @@
       const os = checkPlatform()
       this.list = font[os]
     },
+    mounted () {
+      _huebeeBg = new Huebee('.input-bg', colorConfig)
+      _huebee = new Huebee('.input-font', colorConfig)
+      _huebee.on('change', (val) => {
+        this.$refs.font.style.background = val
+        canvas.style({ fill: val })
+      })
+      _huebeeBg.on('change', (val) => {
+        this.$refs.bg.style.background = val
+        canvas.style({ backgroundColor: val })
+      })
+    },
     methods: {
       copy: canvas.clone.bind(canvas),
       clear: canvas.clear.bind(canvas),
       changeFont (e) {
         canvas.style({ fontFamily: e.target.value })
+      },
+      open (e, t) {
+        const o = e.target.parentNode
+        const c = this.$refs.colorPar.querySelectorAll('.flex')
+        for (let i = 0, len = c.length; i < len; i++) {
+          c[i].classList.remove('overbox')
+        }
+        o.classList.add('overbox')
+        if (t === 'font') {
+          _huebee.open()
+        } else if (t === 'bg') {
+          _huebeeBg.open()
+        }
       }
     }
   }
@@ -198,6 +230,11 @@
   .text_area .flex .iconfont:before {
     padding: 0 8px;
   }
+  .text_area .icon-jiantou {
+    color: #999;
+  }
+
+  /* 颜色插件 */
   .text_area .flex_pd .iconfont:before {
     padding: 0;
   }
@@ -206,17 +243,42 @@
     padding: 0 4px 0 6px;
     border-radius: 3px;
     background: #fff;
-  }
-  .text_area .icon-jiantou {
-    color: #999;
+    overflow: hidden;
   }
   .text_area .color_input {
-    overflow: hidden;
-    width: 26px;
-    height: 26px;
-    border-radius: 3px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;
+    opacity: 0;
   }
+  .text_area .text_color {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 4px 4px;
+    background-color: #666;
+  }
+  .text_area .text_event {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   .text_area .bg {
     padding: 6px;
+  }
+  .text_area .overbox {
+    overflow: inherit;
+  }
+  #fontColor .huebee__container {
+    left: -68px;
+  }
+  #bgColor .huebee__container {
+    left: -156px;
   }
 </style>

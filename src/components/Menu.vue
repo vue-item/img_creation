@@ -38,11 +38,13 @@
 </template>
 
 <script>
+  const Huebee = require('huebee')
+  let huebee = ''
+
+  import { Confirm } from '@common/confirm'
   import { fileReader, loadingImg } from '@common/util'
   import loading from '@common/loading'
   import canvas from '@common/canvas'
-  const Huebee = require('huebee')
-  let huebee = ''
 
   export default {
     props: {
@@ -67,7 +69,19 @@
       target (name) {
         canvas.blur()
         if (name === 'clear') {
-          canvas.clear('all')
+          const len = canvas.getAllObject()
+          if (len <= 0) {
+            Toast.top('画布没啥东西')
+          } else {
+            Confirm({
+              title: '确定清除画布吗',
+              callback: function (type) {
+                if (type === 'ok') {
+                  canvas.clear('all')
+                }
+              }
+            })
+          }
         } else if (name === 'save') {
           canvas.save()
         } else {

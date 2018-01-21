@@ -31,8 +31,8 @@ export const brushList = [
   'hline',
   'vline',
   'square',
-  'diamond',
-  'texture'
+  'diamond'
+  // 'texture'
 ]
 
 export const filter = [

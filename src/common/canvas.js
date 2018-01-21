@@ -103,9 +103,11 @@ const conf = {
         obj = new fabric[name](conf)
       }
     }
+
     if (!opt.canvas) {
       this.canvas.add(obj)
     }
+
     if (name === 'Text' || name === 'IText' || name === 'Textbox') {
       if (!opt.left && !opt.height) {
         obj.center()
@@ -114,9 +116,11 @@ const conf = {
     if (opt.active) {
       this.canvas.setActiveObject(obj)
     }
+
     this.canvas.renderAll()
     return obj
   },
+
   position (name) {
     const obj = this.getActiveObject()
     if (obj) {
@@ -130,6 +134,9 @@ const conf = {
 
   getActiveObject () {
     return this.canvas.getActiveObject()
+  },
+  getAllObject () {
+    return this.canvas.getObjects()
   },
 
   style (opt) {
@@ -166,39 +173,104 @@ const conf = {
   },
 
   /* -- 画笔相关 -- */
-  brush (opt) {
-    switch (opt.mode) {
-      case 'hline':
-        // canvas.freeDrawingBrush =
-        break
-      case 'vline':
-        // canvas.freeDrawingBrush =
-        break
-      case 'square':
-        // canvas.freeDrawingBrush =
-        break
-      case 'diamond':
-        // canvas.freeDrawingBrush =
-        break
-      case 'texture':
-        // canvas.freeDrawingBrush =
-        break
-      default:
-        this.canvas.freeDrawingBrush = new fabric[val + 'Brush'](this.canvas)
-    }
+  // brush (opt) {
+  //   switch (opt.mode) {
+  //     case 'hline':
+  //       const vLinePatternBrush = new fabric.PatternBrush(this.canvas)
+  //       vLinePatternBrush.getPatternSrc = () => {
+  //         const patternCanvas = fabric.document.createElement('canvas')
+  //         patternCanvas.width = patternCanvas.height = 10
+  //         const ctx = patternCanvas.getContext('2d')
+  //         ctx.strokeStyle = opt.lineColor
+  //         ctx.lineWidth = 5
+  //         ctx.beginPath()
+  //         ctx.moveTo(0, 5)
+  //         ctx.lineTo(10, 5)
+  //         ctx.closePath()
+  //         ctx.stroke()
+  //         return patternCanvas
+  //       }
+  //       this.canvas.freeDrawingBrush = vLinePatternBrush
+  //       console.log(this.canvas.freeDrawingBrush)
+  //       break
+  //     case 'vline':
+  //       const hLinePatternBrush = new fabric.PatternBrush(this.canvas)
+  //       hLinePatternBrush.getPatternSrc = () => {
+  //         const patternCanvas = fabric.document.createElement('canvas')
+  //         patternCanvas.width = patternCanvas.height = 10
+  //         const ctx = patternCanvas.getContext('2d')
+  //         ctx.strokeStyle = opt.lineColor
+  //         ctx.lineWidth = 5
+  //         ctx.beginPath()
+  //         ctx.moveTo(5, 0)
+  //         ctx.lineTo(5, 10)
+  //         ctx.closePath()
+  //         ctx.stroke()
+  //         return patternCanvas
+  //       }
+  //       this.canvas.freeDrawingBrush = hLinePatternBrush
+  //       break
+  //     case 'square':
+  //       const squarePatternBrush = new fabric.PatternBrush(this.canvas)
+  //       squarePatternBrush.getPatternSrc = () => {
+  //         const squareWidth = 10
+  //         const squareDistance = 2
+  //         const patternCanvas = fabric.document.createElement('canvas')
+  //         patternCanvas.width = patternCanvas.height = squareWidth + squareDistance
+  //         const ctx = patternCanvas.getContext('2d')
+  //         ctx.fillStyle = opt.lineColor
+  //         ctx.fillRect(0, 0, squareWidth, squareWidth)
+  //         return patternCanvas
+  //       }
 
-    if (this.canvas.freeDrawingBrush) {
-      this.canvas.freeDrawingBrush.color = opt.lineColor
-      this.canvas.freeDrawingBrush.width = parseInt(opt.lineWidth, 10) || 1
-      this.canvas.freeDrawingBrush.shadow = new fabric.Shadow({
-        blur: parseInt(opt.shadowWidth, 10) || 0,
-        offsetX: 0,
-        offsetY: 0,
-        affectStroke: true,
-        color: opt.shadowColor,
-      })
-    }
-  },
+  //       this.canvas.freeDrawingBrush = squarePatternBrush
+  //       break
+  //     case 'diamond':
+  //       const diamondPatternBrush = new fabric.PatternBrush(this.canvas)
+  //       diamondPatternBrush.getPatternSrc = function () {
+  //         const squareWidth = 10
+  //         const squareDistance = 5
+  //         const patternCanvas = fabric.document.createElement('canvas')
+  //         const rect = new fabric.Rect({
+  //           width: squareWidth,
+  //           height: squareWidth,
+  //           angle: 45,
+  //           fill: opt.lineColor
+  //         })
+  //         const canvasWidth = rect.getBoundingRect().width
+  //         patternCanvas.width = patternCanvas.height = canvasWidth + squareDistance
+  //         rect.set({ left: canvasWidth / 2, top: canvasWidth / 2 })
+  //         const ctx = patternCanvas.getContext('2d')
+  //         rect.render(ctx)
+  //         return patternCanvas
+  //       }
+  //       this.canvas.freeDrawingBrush = diamondPatternBrush
+  //       break
+  //     case 'texture':
+  //       const img = new Image()
+  //       img.src = '../assets/honey_im_subtle.png' // to do
+  //       const texturePatternBrush = new fabric.PatternBrush(this.canvas)
+  //       texturePatternBrush.source = img
+  //       this.canvas.freeDrawingBrush = texturePatternBrush
+  //       break
+  //     default:
+  //       this.canvas.freeDrawingBrush = new fabric[opt.mode + 'Brush'](this.canvas)
+  //   }
+
+  //   log(this.canvas.freeDrawingBrush)
+
+  //   if (this.canvas.freeDrawingBrush) {
+  //     this.canvas.freeDrawingBrush.color = opt.lineColor
+  //     this.canvas.freeDrawingBrush.width = parseInt(opt.lineWidth, 10) || 1
+  //     this.canvas.freeDrawingBrush.shadow = new fabric.Shadow({
+  //       blur: parseInt(opt.shadowWidth, 10) || 0,
+  //       offsetX: 0,
+  //       offsetY: 0,
+  //       affectStroke: true,
+  //       color: opt.shadowColor,
+  //     })
+  //   }
+  // },
   brushColor (v, t) {
     if (t === 'brush') {
       this.canvas.freeDrawingBrush.color = v
@@ -207,7 +279,6 @@ const conf = {
     }
   },
   brushLineWidth (v) {
-    log(v)
     this.canvas.freeDrawingBrush.width = parseInt(v, 10) || 1
   },
   brushShadowWidth (v) {
@@ -219,8 +290,8 @@ const conf = {
   },
   brushInit (opt = {}) {
     this.brushCanvas(true)
-    if (!opt) {
-      opt.lineColor = '#666'
+    if (!opt.lineColor) {
+      opt.lineColor = '#999'
       opt.lineWidth = 30
       opt.shadowWidth = 0
       opt.shadowColor = '#666'
@@ -240,7 +311,11 @@ const conf = {
   },
 
   clear (type) {
-    const obj = this.canvas.getActiveObjects()
+    const obj = this.getActiveObject()
+    if (!obj && type === 'only') {
+      Toast.top('请选择要删除的元素')
+      return
+    }
     if (!obj) return
     switch (type) {
       case 'only':
@@ -417,23 +492,6 @@ const conf = {
         _img.setCoords()
       }
     })
-  },
-
-  getVLine () {
-    const vLinePatternBrush = new fabric.PatternBrush(canvas)
-    vLinePatternBrush.getPatternSrc = () => {
-      const patternCanvas = fabric.document.createElement('canvas')
-      patternCanvas.width = patternCanvas.height = 10
-      const ctx = patternCanvas.getContext('2d')
-      ctx.strokeStyle = this.color
-      ctx.lineWidth = 5
-      ctx.beginPath()
-      ctx.moveTo(0, 5)
-      ctx.lineTo(10, 5)
-      ctx.closePath()
-      ctx.stroke()
-      return patternCanvas
-    }
   }
 }
 

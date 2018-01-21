@@ -1,7 +1,7 @@
 <template>
   <div class="brush" v-show="state === 'brush'">
 
-    <div class="start flex bb">
+    <!-- <div class="start flex bb">
       <div>模式</div>
       <div class="flex1"></div>
       <div class="flex br bg" style="padding: 6px;">
@@ -14,7 +14,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="start bb">
       <div class="title mb">画笔</div>
@@ -58,7 +58,9 @@
       <div class="flex mb _flex">
         <div class="gray">操作</div>
         <div class="flex1"></div>
-        <div>取消</div>
+        <div @click="clear" class="btn bg bb">删除</div>
+        <div @click="brushOperating(true)" class="btn bg bb">拾起画笔</div>
+        <div @click="brushOperating(false)" class="btn bg bb">丢弃画笔</div>
       </div>
     </div>
   </div>
@@ -97,6 +99,13 @@
       })
     },
     methods: {
+      clear () {
+        canvas.clear('only')
+        this.brushOperating(false)
+      },
+      brushOperating (type) {
+        canvas.brushCanvas(type)
+      },
       modeChange (e) {
         canvas.brush({
           mode: e.target.value,
@@ -132,6 +141,7 @@
     width: 36px;
     height: 30px;
     border-radius: 5px;
+    background-color: #666;
   }
   .brush .huebee__container {
     left: -1;
@@ -159,5 +169,9 @@
     bottom: -10px;
     pointer-events: none;
     opacity: 0;
+  }
+  .brush .btn {
+    padding: 6px;
+    cursor: pointer;
   }
 </style>
