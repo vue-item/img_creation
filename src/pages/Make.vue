@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import { image, text, shape } from '@api/data'
+  import { image, text, shape, activeObj } from '@api/data' //
   import { createElement } from '@common/util'
   import canvas from '@common/canvas'
   import ViewUrl from '@components/Url'
@@ -69,16 +69,17 @@
     },
     mounted () {
       const f = this.$refs.area
+
       canvas.set(createElement('canvas', {
         id: 'canvas',
         width: f.offsetWidth,
         height: f.offsetHeight,
         father: this.$refs.draw
       }), {
+        backgroundColor: '#f8f8f8',
         isDrawingMode: false,
-        preserveObjectStacking: true
+        preserveObjectStacking: !0
       })
-      canvas.setBgColor('#ffffff')
       canvas.canvas.on({
         'object:selected': (e) => {
           this.changeState(e.target)
@@ -92,6 +93,7 @@
           }
         }
       })
+      canvas.rectCanvas()
     },
     methods: {
       shapeModifyState () {
@@ -114,11 +116,10 @@
       },
       // to do
       changeState (tar) {
-        if (this.state === 'brush') return // 锁定画笔状态
-        if (!tar || !tar.type) {
-          this.state = ''
-          return
-        }
+        if (!tar) return
+        if (tar) activeObj.type = tar.type // 存储类型 用于图形判断path 获取颜色值
+        if (canvas.canvas.isDrawingMode && this.state === 'brush') return // 锁定画笔状态 画的过程中 防止工具栏消失
+        if (activeObj.rect === tar) return
         const type = tar.type
         if (type === 'text' || type === 'textbox') {
           this.list.textarea = tar.text
@@ -265,7 +266,7 @@
     width: calc(100vw / 5);
     min-width: 260px;
     border-left: 1px solid #DCDCDC;
-    background-color: #F5F5F5;
+    background-color: #f7f7f7;
   }
   .operating_area .group {
     height: 50px;
@@ -295,9 +296,8 @@
     background-color: #fff;
   }
   .operating_area .operating_position {
-    /*height: calc(100vh - 90px);*/
-    /*margin-bottom: 40px;*/
-    /*overflow-y: auto;*/
+    height: calc(100vh - 50px);
+    overflow-y: auto;
     box-sizing: border-box;
   }
   .operating_area .operating_position::-webkit-scrollbar { width: 0; }

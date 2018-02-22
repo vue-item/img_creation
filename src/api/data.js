@@ -1,3 +1,4 @@
+export const activeObj = {}
 export const shape = [{
   text: '方形',
   type: 'Rect',
@@ -288,3 +289,44 @@ export const colorConfig = {
   setBGColor: true
 }
 
+/*
+fabric.Canvas.prototype.customiseControls({
+    tl: {
+        action: 'move',
+        cursor: 'pointer'
+    },
+    tr: {
+        action: 'rotate',
+        cursor: 'pointer'
+    },
+    bl: {
+        action: 'remove',
+        cursor: 'pointer'
+    },
+    br: {
+        action: 'scale',
+        cursor: 'pointer'
+    }
+});
+fabric.Object.prototype.customiseCornerIcons({
+    settings: {
+        borderColor: '#0094dd',
+        cornerSize: 50,
+        cornerShape: 'circle',
+//            cornerShape: 'rect',
+        cornerBackgroundColor: 'gray',
+    },
+    tl: {
+        icon: '/img/move.png',
+    },
+    tr: {
+        icon: '/img/rotate.png',
+    },
+    bl: {
+        icon: '/img/remove.png',
+    },
+    br: {
+        icon: '/img/resize.png',
+    },
+});
+*/

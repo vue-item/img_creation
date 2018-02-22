@@ -1,21 +1,35 @@
-const preview = (opt) => {
-  this.render()
-}
+require('./style.css')
 
-preview.prototype.render = () => {
+const PreView = function (opt) {
   const html = '' +
-  '<div class="preview">' +
+  '<div id="preview" class="preview">' +
+  ' <b class="close">&times;</b>' +
   ' <div class="preview_box">' +
   '   <div id="preview_img" class="preview_img">' +
-  '     <img src="http://img1.imgtn.bdimg.com/it/u=2862439063,3834071056&fm=27&gp=0.jpg" />' +
+  '     <img src="' + opt.src + '" />' +
   '   </div>' +
   '   <div class="preview_mb">' +
   '     <div class="preview_btn">保存图片</div>' +
-  '     <div>点击图片保存</div>' +
   '   </div>' +
   ' </div>' +
   '</div>'
+
   document.body.insertAdjacentHTML('beforeend', html)
+  const preview = document.querySelector('#preview')
+  const btn = preview.querySelector('.preview_btn')
+  const close = preview.querySelector('.close')
+
+  btn.addEventListener('click', (e) => {
+    opt.callback()
+    preview.classList.remove('active')
+    e.stopPropagation()
+  })
+  close.addEventListener('click', (e) => {
+    preview.classList.remove('active')
+  })
+  setTimeout(() => {
+    preview.classList.add('active')
+  }, 200)
 }
 
-default export preview
+export default PreView

@@ -28,19 +28,31 @@ const base = {
   // left: 100,
   // top: 100
 }
+function dataURItoBlob(dataURI) {
+  const byteString = atob(dataURI.split(',')[1])
+  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+  const ab = new ArrayBuffer(byteString.length)
+  const ia = new Uint8Array(ab)
+  for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i)
+  }
+  return new Blob([ab], {type: mimeString})
+}
 
 // fabric.util.getRandomInt(0, 600)
 // const obj = ['Text', 'IText', 'Textbox', 'Image']
 import './lib/gif'
 import './lib/Blob'
 import './lib/canvas-toBlob'
+import PreView from './preview'
 import { saveAs } from 'file-saver'
 import { fabric } from 'fabric'
-import { filter } from '@api/data'
+import { filter, activeObj } from '@api/data'
 import { getOffset } from './util'
 
 const log = console.log
 const f = fabric.Image.filters
+
 const pad = (str, length) => {
   while (str.length < length) {
     str = '0' + str
@@ -54,7 +66,7 @@ const getRandomColor = () => {
     pad(getRandomInt(0, 255).toString(16), 2) +
     pad(getRandomInt(0, 255).toString(16), 2) +
     pad(getRandomInt(0, 255).toString(16), 2)
-  );
+  )
 }
 
 const conf = {
@@ -62,12 +74,36 @@ const conf = {
   mr: 6,
   tmp: [],
   set (name, opt = {}) {
-    if (this.canvas) {
-      //
-    } else {
-      this.canvas = new fabric.Canvas(name, Object.assign({}, opt))
-    }
+    this.canvas = new fabric.Canvas(name, Object.assign({}, opt))
     return this.canvas
+  },
+
+  /* 方形画布 */
+  rectCanvas () {
+
+    const w = this.canvas.width
+    const h = this.canvas.height
+    const _h = h - 250
+    let _w = ''
+
+    if (w > 420) {
+      _w = 420 - 10
+    } else {
+      _w = w - 10
+    }
+
+    const rect = new fabric.Rect({
+      width: _w,
+      height: _h,
+      left: (w - _w) / 2,
+      top: (h - _h) / 2,
+      fill: '#fff',
+      hasControls: !1,
+      selectable: !1,
+      hoverCursor: 'default'
+    })
+    activeObj.rect = rect // 点击识别用
+    this.canvas.add(rect)
   },
 
   create (name, text = '请输入', opt = {}) {
@@ -312,11 +348,10 @@ const conf = {
 
   clear (type) {
     const obj = this.getActiveObject()
-    if (!obj && type === 'only') {
+    if (type === 'only' && !obj) {
       Toast.top('请选择要删除的元素')
       return
     }
-    if (!obj) return
     switch (type) {
       case 'only':
         this.canvas.remove.apply(this.canvas, this.canvas.getActiveObjects())
@@ -338,18 +373,6 @@ const conf = {
       h: obj.height,
       f: obj.fontSize
     }
-  },
-
-  save () {
-    this.blur()
-    const _ = document.querySelector('#canvas')
-    _.toBlob((blob) => {
-      const fr = new FileReader()
-      fr.addEventListener('loadend', () => {
-        saveAs(blob, 'node.png')
-      })
-      fr.readAsDataURL(blob)
-    })
   },
 
   setZoom (n) {
@@ -439,18 +462,38 @@ const conf = {
     })
   },
 
-  // 测试方法
-  preView () {
-    this.canvas.clone((o) => {
-      const s = 9
-      const obj = o.getObjects()
-      if (obj.length) {
-        obj.forEach((v) => {
-
-        })
-      } else {
-
+  save () {
+    this.blur()
+    this.canvas.clone((t) => {
+      if (t.getObjects().length <= 1) {
+        Toast.top('画布上没有任何元素')
+        return
       }
+      const params = {}
+      const rect = t.getObjects()[0]
+      const o = rect.getBoundingRect()
+      params.l = o.left
+      params.t  = o.top
+      params.w = rect.width
+      params.h = rect.height
+      log(t)
+
+      const src = t.toDataURL({
+        format: "image/png",
+        multiplier: 1,
+        left: params.l,
+        top: params.t,
+        width: params.w,
+        height: params.h
+      }, 0.5)
+
+      PreView({
+        src,
+        callback () {
+          const d = dataURItoBlob(src)
+          saveAs(d, 'me.png')
+        }
+      })
     })
   },
 
@@ -477,7 +520,6 @@ const conf = {
       e.preventDefault()
     })
     make.addEventListener('drop', (e) => {
-
       e.preventDefault()
       const src = document.querySelector('#expression_img .activeImg').src
       const img = new Image

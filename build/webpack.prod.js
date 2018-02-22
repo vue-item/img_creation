@@ -15,7 +15,7 @@ const pkg = require('../package.json')
 const utils = require('./utils')
 const conf = require('./utils/config')
 
-const conf = merge(webpackConfig, {
+const wb= merge(webpackConfig, {
   module: {
     rules: utils.styleLoaders({ extract: true })
   },
@@ -57,13 +57,13 @@ const conf = merge(webpackConfig, {
       threshold: 10240,
       minRatio: 0.8
     }),
-    new HtmlwebpackPlugin({
-      dev: '"production"',
-      title: 'vx',
-      template: './build/views/HtmlwebpackPlugin.ejs',
-      inject: 'body',
-      chunks: ['vendor', 'app']
-    }),
+    // new HtmlwebpackPlugin({
+    //   dev: '"production"',
+    //   title: 'vx',
+    //   template: './build/views/HtmlwebpackPlugin.ejs',
+    //   inject: 'body',
+    //   chunks: ['vendor', 'app']
+    // }),
     new CleanWebpackPlugin(['dist', 'zip'], { root: `${process.cwd()}` }),
     new ManifestPlugin({
       versionFiles: [
@@ -85,4 +85,4 @@ const conf = merge(webpackConfig, {
   devtool: false
 })
 
-module.exports = conf
+module.exports = wb

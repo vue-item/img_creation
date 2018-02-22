@@ -5,7 +5,7 @@
       <div class="flex1"></div>
       <div id="shape_color" class="flex color_box br">
           <div ref="color" class="text_color"></div>
-          <input @input="changeEvent($event, 'fill')" class="shape_color" type="text" name="color">
+          <input class="shape_color" type="text" name="color">
           <div @click="open($event, 'font')" class="text_event"></div>
           <i class="iconfont icon-jiantou f8"></i>
         </div>
@@ -76,13 +76,14 @@
 </template>
 
 <script>
-  import { colorConfig } from '@api/data'
+  import { colorConfig, activeObj } from '@api/data'
   import cs from '@common/canvas'
   const Huebee = require('huebee')
   let _huebee = ''
   // http://fabricjs.com/fabric-intro-part-2
   // 边框 阴影 没加
   // 切图 https://github.com/nyanim/fabricjs-crop/blob/master/index.html
+
   export default {
     props: {
       state: String,
@@ -105,37 +106,51 @@
       })
 
       _huebee = new Huebee('.shape_color', colorConfig)
-      _huebee.on('change', (val) => {
-        this.$refs.color.style.background = val
-        // canvas.style({ fill: val })
+      _huebee.on('change', (v) => {
+        this.$refs.color.style.background = v
+        const obj = cs.getActiveObject()
+        if (activeObj.type === 'path') {
+          obj.set('stroke', v).setCoords()
+        } else {
+          obj.set('fill', v).setCoords()
+        }
+        cs.canvas.requestRenderAll()
       })
     },
     methods: {
       init () {
+        const r = this.$refs
         const obj = cs.getActiveObject()
         if (!obj) return
-        this.$refs.angle.value = obj.angle
-        this.$refs.left.value = obj.left
-        this.$refs.top.value = obj.top
-        this.$refs.scale.value = obj.scaleX
-        this.$refs.skewX.value = obj.skewX
-        this.$refs.skewY.value = obj.skewY
-        this.$refs.opacity.value = obj.opacity
-        this.$refs.color.style.backgroundColor = obj.fill
+        r.angle.value = obj.angle
+        r.left.value = obj.left
+        r.top.value = obj.top
+        r.scale.value = obj.scaleX
+        r.skewX.value = obj.skewX
+        r.skewY.value = obj.skewY
+        r.opacity.value = obj.opacity
+        if (activeObj.type === 'path') {
+          r.color.style.backgroundColor = obj.stroke
+        } else {
+          r.color.style.backgroundColor = obj.fill
+        }
       },
       open (e) {
-        const tar = e.target.parentNode
-        tar.classList.toggle('')
-        _huebee.open()
+        const o = e.target.parentNode
+        if (o.classList.contains('overbox')) {
+          o.classList.remove('overbox')
+        } else {
+          _huebee.open()
+          o.classList.add('overbox')
+        }
       },
       clear () {
         cs.clear('only')
         this.modify()
       },
-      change (e, t) {
+      change (e, t) { // 不依赖canvas的方法
         const v = e.target.value
         const obj = cs.getActiveObject()
-
         switch (t) {
           case 'angle':
             obj.set('angle', parseInt(v, 10)).setCoords()
@@ -157,9 +172,6 @@
             break
           case 'opacity':
             obj.set('opacity', v).setCoords()
-            break
-          case '':
-            obj.set('backgroundColor', v).setCoords()
             break
           case 'bringForward':
           case 'sendBackwards':
@@ -205,5 +217,9 @@
   }
   ._shape .icon-jiantou {
     pointer-events: none;
+  }
+  #shape_color .huebee__container {
+    margin-left: -184px;
+    background: #fff;
   }
 </style>

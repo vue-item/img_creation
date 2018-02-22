@@ -176,7 +176,7 @@
         <input type="range" @input="blurChange($event, 17, 'blur')" class="range_input" value="0.1" min="0" max="1" step="0.01" ref="blur">
       </div>
     </div>
-
+    <!--
     <div class="start bb">
       <div class="flex flex_start mb">
         <label><input class="color_input" @input="blend($event, 19)" type="checkbox">混合颜色</label>
@@ -200,7 +200,7 @@
         <input type="range" @input="blendChange($event, 19, 'alpha')" class="range_input" ref="blend_alpha">
       </div>
     </div>
-
+    -->
     <!--
     <div class="flex bg br">
       <button @click="changeEvent($event, 'top')" class="iconfont flex1 icon-duiqi-shang f12"></button>

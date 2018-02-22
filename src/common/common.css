@@ -207,3 +207,10 @@ button {
 .tips_hover:hover b {
   transform: scale(1);
 }
+
+/*view img*/
+.img_mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+}

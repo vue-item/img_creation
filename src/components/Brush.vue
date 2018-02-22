@@ -59,7 +59,7 @@
         <div class="gray">操作</div>
         <div class="flex1"></div>
         <div @click="clear" class="btn bg bb">删除</div>
-        <div @click="brushOperating(true)" class="btn bg bb">拾起画笔</div>
+        <!-- <div @click="brushOperating(true)" class="btn bg bb">拾起画笔</div> -->
         <div @click="brushOperating(false)" class="btn bg bb">丢弃画笔</div>
       </div>
     </div>

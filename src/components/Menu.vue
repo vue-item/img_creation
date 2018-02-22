@@ -29,11 +29,14 @@
       <i class="iconfont icon-Save"></i>
       <b></b>
     </div>
+    <!-- <div v-on:click="test" data-tips="截图图片" class="box tips_hover">
+      <i class="iconfont icon-jietu"></i>
+      <b></b>
+    </div> -->
     <div v-on:click="target('clear')" data-tips="清除画布" class="box tips_hover">
       <i class="iconfont icon-lajitong1"></i>
       <b></b>
     </div>
-    <div @click="test" class="test">测试</div>
   </div>
 </template>
 
@@ -103,10 +106,12 @@
             })
           }
         })
-      },
+      }
+      /*
       test (e) {
         canvas.preView()
       }
+      */
     }
   }
 </script>
